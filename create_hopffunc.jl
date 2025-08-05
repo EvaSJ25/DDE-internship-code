@@ -8,10 +8,10 @@ function create_hopffunc(f_DDE,f_tau, pars, x0,p0,par_indx,nd;m=100)
     params[par_indx]=p0
     Id=Matrix{Float64}(I,n,n)
 
-    function df(s,x,p)
+    function df(i,x,p)
         params=deepcopy(pars)
         params[par_indx]=p
-        J=f_deriv(f_DDE,x,params,nd,nx=s)
+        J=f_deriv(f_DDE,x,params,nd,nx=i)
         return J
     end
 
