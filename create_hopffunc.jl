@@ -24,7 +24,11 @@ function create_hopffunc(f_DDE,f_tau, pars, x0,p0,par_indx,nd;m=100)
 
     function fhopf(y)
         params=deepcopy(pars)
-        u,vr,vi,om,p=y[1:n], y[n+1:2*n], y[2*n+1:3*n],y[3*n+1],y[3*n+2] #u,vr,vi,om,p=y[1:2], y[3:4], y[5:6],y[7],y[8]
+        if length(par_indx)==1
+            u,vr,vi,om,p=y[1:n], y[n+1:2*n], y[2*n+1:3*n],y[3*n+1],y[end]
+        else
+            u,vr,vi,om,p=y[1:n], y[n+1:2*n], y[2*n+1:3*n],y[3*n+1],y[3*n+2:end] 
+        end
         params[par_indx]=p
         uvec=[u for _ in 1:nd+1]
         v=vr+vi*im
