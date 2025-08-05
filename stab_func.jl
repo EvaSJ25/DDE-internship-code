@@ -1,4 +1,4 @@
-function stab_func(f_DDE,f_tau,x0,p0,pars,par_indx,nd;doprint=1,hopf=0,h=1e-6,m=100)
+function stab_func(f_DDE,f_tau,x0,p0::Vector,pars,par_indx::Vector,nd;doprint=1,hopf=0,h=1e-6,m=100)#(f_DDE,f_tau,x0,p0,pars,par_indx,nd;doprint=1,hopf=0,h=1e-6,m=100)
     ##inputs:
     #x is the equilibirium point you're finding the stability of
     #p is the (varied) parameter value at which this equilibrium point occurs at
@@ -81,7 +81,7 @@ function stab_func(f_DDE,f_tau,x0,p0,pars,par_indx,nd;doprint=1,hopf=0,h=1e-6,m=
     end
 
     lamb_dom1,=findmax(real(eigvalsJ)) #if this is less than 0 then the equilibria is stable else it is unstable 
-    #@infiltrate
+    
     if (lamb_dom1>0.0) #equilibrium is unstable
         stab=0
     else 
