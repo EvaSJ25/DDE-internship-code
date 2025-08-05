@@ -1,15 +1,18 @@
 using LinearAlgebra #needed for I in identity matrix
-function create_hopffunc(f_DDE,f_tau, pars, x0,p0,par_indx,nd;m=100) 
+function create_hopffunc(f_DDE,f_tau, pars, x0,p0::Vector,par_indx::Vector,nd;m=100) 
     include("f_deriv.jl") 
     include("stab_func.jl")
     n=length(x0) #number of states of x:x_1,...,x_n
     uvec1=[x0 for _ in 1:nd+1]
     params=deepcopy(pars)
+    #params[par_indx]=[p0]
     params[par_indx]=p0
+
     Id=Matrix{Float64}(I,n,n)
 
     function df(i,x,p)
         params=deepcopy(pars)
+        #params[par_indx]=[p]
         params[par_indx]=p
         J=f_deriv(f_DDE,x,params,nd,nx=i)
         return J
@@ -22,14 +25,11 @@ function create_hopffunc(f_DDE,f_tau, pars, x0,p0,par_indx,nd;m=100)
 
     y0=vcat(x0,vrini,viini,omini,p0)
 
-    function fhopf(y)
+    function fhopf(y) 
         params=deepcopy(pars)
-        if length(par_indx)==1
-            u,vr,vi,om,p=y[1:n], y[n+1:2*n], y[2*n+1:3*n],y[3*n+1],y[end]
-        else
-            u,vr,vi,om,p=y[1:n], y[n+1:2*n], y[2*n+1:3*n],y[3*n+1],y[3*n+2:end] 
-        end
+        u,vr,vi,om,p=y[1:n], y[n+1:2*n], y[2*n+1:3*n],y[3*n+1],y[3*n+2:end] 
         params[par_indx]=p
+
         uvec=[u for _ in 1:nd+1]
         v=vr+vi*im
         A=fill(NaN,n,n,nd+1)
@@ -47,7 +47,7 @@ function create_hopffunc(f_DDE,f_tau, pars, x0,p0,par_indx,nd;m=100)
         end
 
         J=(om*im).*Id-A_mat #characteristic (equation) matrix J=(Δ(λ)) 
-        rdf=J*v#charactersitic equation matrix times v (rdf=Δ(λ)*v) # v corresponds to v in system solution u(t)=ve^λt
+        rdf=J*v #charactersitic equation matrix times v (rdf=Δ(λ)*v) # v corresponds to v in system solution u(t)=ve^λt
         real_rdf=real(rdf)
         imag_rdf=imag(rdf)
 
