@@ -1,11 +1,9 @@
 function jacobian_new(f,x; h=1e-5)
-    #@infiltrate
     n=length(x) #length of vector x
-    #@infiltrate
     m=length(f(x)) #length of vector of outputs of f  e.g. if f is vector with 2 fubfuncton, length of f =2
     J=fill(NaN,m,n) #array for jacobian matrix J is a matrix with m rows and n columns 
     ej=fill(0.0,n) #defines ej vectors
-    #@infiltrate
+    
     for j in 1:n
         ej=fill(0.0,n) #resets ej for each j iteration
         ej[j]=1 #sets jth component to 1 (all the others are zero)
