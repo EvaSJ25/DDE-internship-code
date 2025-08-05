@@ -46,7 +46,7 @@ function stab_func(f_DDE,f_tau,x0,p0,pars,par_indx,nd;doprint=1,hopf=0,h=1e-6,m=
     function df(s,x,p)
         params=deepcopy(pars)
         params[par_indx]=p
-        J=f_deriv_draft1(f_DDE,x,params,nd,nx=s)
+        J=f_deriv(f_DDE,x,params,nd,nx=s)
         return J
     end
     
