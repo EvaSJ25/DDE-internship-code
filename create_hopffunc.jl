@@ -5,14 +5,12 @@ function create_hopffunc(f_DDE,f_tau, pars, x0,p0::Vector,par_indx::Vector,nd;m=
     n=length(x0) #number of states of x:x_1,...,x_n
     uvec1=[x0 for _ in 1:nd+1]
     params=deepcopy(pars)
-    #params[par_indx]=[p0]
     params[par_indx]=p0
 
     Id=Matrix{Float64}(I,n,n)
 
     function df(i,x,p)
         params=deepcopy(pars)
-        #params[par_indx]=[p]
         params[par_indx]=p
         J=f_deriv(f_DDE,x,params,nd,nx=i)
         return J
