@@ -1,9 +1,7 @@
 using LinearAlgebra
 function newton_new(f,x0; h=1e-5,df=x->jacobian_new(f,x;h=h),tol=1e-8,maxit=100)#maxit increased from 6 to 100
     n=length(x0)
-    @infiltrate 
     x=x0-df(x0)\f(x0) #calculates x for first step
-    #x=x0-pinv(df(x0))*f(x0) #still doesn't resolve singular error
 
     xold=x0 #makes first xold (previous step) equal to x0
     iter=0 #iter is the iteration step
