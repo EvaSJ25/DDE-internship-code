@@ -44,7 +44,12 @@ function f_deriv(f,u,pars,nd;nx=[],np=[],v=[],h=1e-5,k=1e-5) #u many columns
     elseif isempty(nx) && length(np)==1 && isempty(v)
         J=fill(NaN,n)
         pars_plus[np]=pars_plus[np]+h
-        J=(1/h)*(f(uvec,pars_plus)-f(uvec,pars))
+        pars_neg[np]=pars_neg[np]-h
+        J=(1/2h)*(f(uvec,pars_plus)-f(uvec,pars_neg)) #finds finite difference with adjusted parameter values
+            
+
+        pars_plus[np]=deepcopy(pars[np]) #resets pars_plus to what it was before (so it doesn't affect the next interation)
+        pars_neg[np]=deepcopy(pars[np])
         return J
     elseif length(nx)==1 && length(np)==1 && isempty(v)
         J=fill(NaN,m,n)
@@ -55,11 +60,10 @@ function f_deriv(f,u,pars,nd;nx=[],np=[],v=[],h=1e-5,k=1e-5) #u many columns
             u_neg[nx]=u_neg[nx]-h*ej
 
             pars_plus[np]=pars_plus[np]+k
-            pars_neg[np]=pars_neg[np]-h
-            #@infiltrate
+            pars_neg[np]=pars_neg[np]-k
 
-            J[:,j]=(1/(4*h*k))*(f(u_plus,pars_plus)-f(u_plus,pars_neg)-f(u_neg,pars_plus)+f(u_neg,pars_neg))
-            #@infiltrate
+            J[:,j]=(1/(4*h*k))*(f(u_plus,pars_plus)-f(u_plus,pars_neg)-f(u_neg,pars_plus)+f(u_neg,pars_neg)) #finds finite difference with adjusted state  and parameter values
+            
             u_plus[nx]=deepcopy(uvec[nx]) #resets n_plus to what it was before (so it doesn't affect the next interation)
             u_neg[nx]=deepcopy(uvec[nx])
             pars_plus[np]=deepcopy(pars[np])
