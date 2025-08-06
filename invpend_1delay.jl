@@ -1,3 +1,6 @@
+#Inverted pendulum with 1 delay, tau
+#xdot=v(t)
+#vdot=sin(x(t))-ax(t-tau)-bv(t-tau)
 function invpend_1delay(u::Vector{Vector{Float64}},pars::Vector{Float64})
     ##inputs:
     #u are the values of the states (x(t), x(t-τ)) in vector of vector form
