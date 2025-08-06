@@ -1,4 +1,5 @@
 function f_deriv(f,u,pars,nd;nx=[],np=[],v=[],h=1e-5,k=1e-5) #u many columns
+    ##inputs:
     #f is the system (equations)
     #u is the point jacobian being taken at
     #pars are the system parameters
@@ -8,11 +9,14 @@ function f_deriv(f,u,pars,nd;nx=[],np=[],v=[],h=1e-5,k=1e-5) #u many columns
     #np is whether you want parameter derivative (empty = no parameter derivative wanted)
     #h is the small step for finite difference
     #k is the small steps for paramater (used only is nx and np both non-empty)
+    
+    ##outputs:
+    #Matrix of partial derivatives (for chosen state and/or parameter derivative)
+
     uvec=[u for _ in 1:nd+1]
     n=length(u) #length of vector x - the number of states (e.g. x1,x2,etc)
-    #@infiltrate
     m=length(f(uvec,pars)) #length of vector of outputs of f  e.g. if f is vector with 2 fubfuncton, length of f =2
-    num_p=length(pars)
+    #num_p=length(pars)
 
     ej=fill(0.0,n) 
 
