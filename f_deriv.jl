@@ -16,16 +16,15 @@ function f_deriv(f,u,pars,nd;nx=[],np=[],v=[],h=1e-5,k=1e-5) #u many columns
     uvec=[u for _ in 1:nd+1]
     n=length(u) #length of vector x - the number of states (e.g. x1,x2,etc)
     m=length(f(uvec,pars)) #length of vector of outputs of f  e.g. if f is vector with 2 fubfuncton, length of f =2
-    #num_p=length(pars)
 
-    ej=fill(0.0,n) 
+    ej=fill(0.0,n) #starts to set up unit vector
 
-    u_plus=deepcopy(uvec)
-    u_neg=deepcopy(uvec)
-    pars_plus=deepcopy(pars)
-    pars_neg=deepcopy(pars)
+    #deepcopy used as function is handling vector of vectors
+    u_plus=deepcopy(uvec) #ready for adding step to uvec (for state derivative)
+    u_neg=deepcopy(uvec) #ready for subtracting step to uvec (for state derivative)
+    pars_plus=deepcopy(pars) #ready for adding step to pars (for parameter derivative)
+    pars_neg=deepcopy(pars) #ready for subtracting step to pars (for parameter derivative)
 
-    #if length(nx)==0 && length(np)==0
     if isempty(nx) && isempty(np)
         return println("Please state which derivative you would like")
     elseif length(nx)==1 && isempty(np) && isempty(v)
@@ -33,18 +32,11 @@ function f_deriv(f,u,pars,nd;nx=[],np=[],v=[],h=1e-5,k=1e-5) #u many columns
         for j in 1:n
             ej=fill(0.0,n)
             ej[j]=1
-            #@infiltrate
             u_plus[nx]=u_plus[nx].+h*ej
-            #u_plus[nx]=u_plus[nx]+h*ej
-
-            #u_plus[nx[1]]=u_plus[nx[1]]+h*ej #MATLAB version manual has this!
-
             u_neg[nx]=u_neg[nx].-h*ej
-            #u_neg[nx]=u_neg[nx]-h*ej
 
-            #@infiltrate
-            J[:,j].=(1/2h)*(f(u_plus,pars) - f(u_neg,pars))
-            #Below may not be needed
+            J[:,j].=(1/2h)*(f(u_plus,pars) - f(u_neg,pars)) #finds finite difference with adjusted state values
+            
             u_plus[nx]=deepcopy(uvec[nx]) #resets n_plus to what it was before (so it doesn't affect the next interation)
             u_neg[nx]=deepcopy(uvec[nx])
         end 
