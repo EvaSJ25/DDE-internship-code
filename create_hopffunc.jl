@@ -18,7 +18,7 @@ function create_hopffunc(f_DDE,f_tau, pars, x0,p0::Vector,par_indx::Vector,nd;m=
 
     sfunc=stab_func(f_DDE,f_tau,x0,p0,params,par_indx,nd,hopf=1) #want hopf!=0 here as we need the omega value
     vrini=sfunc[2]
-    viini=sfunc[3]
+    viini=sfunc[3] #testing
     omini=sfunc[4]
 
     y0=vcat(x0,vrini,viini,omini,p0)
