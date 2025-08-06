@@ -1,5 +1,5 @@
 using LinearAlgebra
-function F_eq(f_DDE, u0, pars,nd; par_indx=[]) #need to add delay equation later!!!
+function F_eq(f_DDE, u0, pars,nd; par_indx=[])#(f_DDE, f_tau,u0, pars,nd; par_indx=[]) #need to add delay equation later!!!
     #f_DDE is the RHS of the system
     #u0 is the initial guess (for the states x_i's)
     #pars are parameters of the system (including the delays)
@@ -13,7 +13,7 @@ function F_eq(f_DDE, u0, pars,nd; par_indx=[]) #need to add delay equation later
     #nf=length(f_DDE(u0vec,pars)) #dimension of f
     np=length(par_indx)
     y0=vcat(u0,pars[par_indx]) #n+1 dimensional (n+1th term is the parameter being varied)
-
+    #tau=f_tau(u0vec,pars)
 
     #This works for use in newton and track_curve
     function f_equilibrium(y) #creates a function that can be used in newton and track_curve functions
