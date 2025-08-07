@@ -43,10 +43,10 @@ function stab_func(f_DDE,f_tau,x0::Vector,p0::Vector,pars,par_indx::Vector,nd;do
         stab_mat[n*((i-1)*m+1)+1:n*((i-1)*m+1)+n,n*((i-1)*m+1)+1-n:n*((i-1)*m+1)+n-n]=0*Id
     end 
 
-    function df(s,x,p)
+    function df(i,x,p)
         params=deepcopy(pars)
         params[par_indx]=p
-        J=f_deriv(f_DDE,x,params,nd,nx=s)
+        J=f_deriv(f_DDE,x,params,nd,nx=i)
         return J
     end
     
