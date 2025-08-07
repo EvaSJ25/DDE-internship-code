@@ -7,7 +7,7 @@ function mackeyglassfunc(u,pars)
     u1=convert(Float64,u[1][1]) 
     u2=convert(Float64,u[2][1])
     
-    xdot=pars[1]*((u2)/1+(real((u2+0im)^(pars[3]))))-pars[2]*u1
+    xdot=pars[1]*((u2)/(1+(real((u2+0im)^(pars[3])))))-pars[2]*u1
 
     return [xdot]
 end 
