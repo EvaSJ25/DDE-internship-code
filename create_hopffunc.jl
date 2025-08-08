@@ -57,7 +57,7 @@ function create_hopffunc(f_DDE,f_tau, pars, x0,p0::Vector,par_indx::Vector,nd;m=
         rf=f_DDE(uvec,params) # still need f(x*,...x*,params)=0
         A_mat=A[:,:,1] #starts with A_0
 
-        tau=f_tau(uvec,params)
+        tau=f_tau(uvec,params) #adds tau dependence to hopf function
         
         #Below creates the sum A_0 + A_1*exp(-lam*tau_1)+...+ A_nd*(-lam*tau_nd)
         for j in 2:nd+1
