@@ -11,15 +11,16 @@ function stab_func(f_DDE,f_tau,x0::Vector,p0::Vector,pars,par_indx::Vector,nd;do
 
     ##outputs:
     #stab=the stability of the equilibrium point given
+
     n=length(x0) #number of states
-    uvec1=[x0 for _ in 1:nd+1]
+    uvec1=[x0 for _ in 1:nd+1] #repeats the equilibrium point for all delayed states
     params=deepcopy(pars)
-    params[par_indx]=p0
-    Id=Matrix{Float64}(I,n,n)
+    params[par_indx]=p0 
+    Id=Matrix{Float64}(I,n,n) #creates identity matrix
 
     l=n*(1+nd*m) #number of rows (=columns) of large matrix
     
-    tau=f_tau(uvec1,params)
+    tau=f_tau(uvec1,params) #finds tau(s) of system (so they can be used in the large matrix calculation)
     stab_mat=fill(0.0,l,l) #we assume that m_1=m_2=m (e.g. for nd=2)
 
     #-m/tau1 on the diagonal 
