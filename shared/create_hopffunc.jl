@@ -15,8 +15,8 @@ function create_hopffunc(f_DDE,f_tau, pars, x0,p0::Vector,par_indx::Vector,nd;m=
     #Note:where x is are the states, vr and vi are the real and imaginary parts of the (first) eigenvector for eigenvalue om (ω) and p is the initial guess of Hopf parameter p
     #fhopf is the function that finds the Hopf and is in a form that can be used in Newton (for finding exact parameter values) or Track curve (to continue to 2-parameter plane)
 
-    include("f_deriv.jl") #used to find the state partial derivatives matrices
-    include("stab_func.jl") #used to find the eigenvalues and eigenvectors of initial Hopf guess
+    #include("f_deriv.jl") #used to find the state partial derivatives matrices
+    #include("stab_func.jl") #used to find the eigenvalues and eigenvectors of initial Hopf guess
     n=length(x0) #number of states of x:x_1,...,x_n
     uvec1=[x0 for _ in 1:nd+1] #makes vector of vectors (repeats equilibrium for x(t)=x(t-τ1)=..=x(t-τnd)
     params=deepcopy(pars)
