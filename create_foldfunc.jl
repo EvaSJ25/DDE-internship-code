@@ -1,5 +1,5 @@
 using LinearAlgebra
-function create_foldfunc(f_DDE, f_tau,pars,x0,p0,par_indx,nd;m=100)
+function create_foldfunc(f_DDE, f_tau,pars,x0,p0::Vector,par_indx::Vector,nd;m=100)
     #find eigenvalue that is closest to being purely 0
     include("stab_func.jl")
     include("f_deriv.jl")
@@ -38,16 +38,7 @@ function create_foldfunc(f_DDE, f_tau,pars,x0,p0,par_indx,nd;m=100)
     y0=vcat(x0,vrini,viini,p0)
     function ffold(y)
         params=deepcopy(pars)
-        if length(par_indx)==1
-            #u,vr,vi,lam,p=y[1:n], y[n+1:2*n], y[2*n+1:3*n],y[3*n+1],y[3*n+2] #u,vr,vi,om,p=y[1:2], y[3:4], y[5:6],y[7],y[8]
-            u,vr,vi,p=y[1:n], y[n+1:2*n], y[2*n+1:3*n],y[3*n+1] #u,vr,vi,om,p=y[1:2], y[3:4], y[5:6],y[7],y[8]
-
-        else
-            #u,vr,vi,lam,p=y[1:n], y[n+1:2*n], y[2*n+1:3*n],y[3*n+1],y[3*n+2:end] #u,vr,vi,om,p=y[1:2], y[3:4], y[5:6],y[7],y[8]
-            u,vr,vi,lam,p=y[1:n], y[n+1:2*n], y[2*n+1:3*n],y[3*n+1:end] #u,vr,vi,om,p=y[1:2], y[3:4], y[5:6],y[7],y[8]
-        end
-        #u,vr,vi,p=y[1:n],y[n+1:2*n],y[2*n+1:3*n],y[3*n+1]
-        #u,vr,vi,p=y[1:n], y[n+1:2*n], y[2*n+1:3*n],y[3*n+1],y[3*n+2] #u,vr,vi,om,p=y[1:2], y[3:4], y[5:6],y[7],y[8]
+        u,vr,vi,p=y[1:n], y[n+1:2*n], y[2*n+1:3*n],y[3*n+1:end] 
         params[par_indx]=p
         uvec=[u for _ in 1:nd+1]
         v=vr+vi*im
