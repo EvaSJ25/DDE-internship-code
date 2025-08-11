@@ -10,7 +10,7 @@ function track_curve_new(userf,y0,ytan; h=1e-5,userdf=x->jacobian_new(userf,x;h=
     en1[n]=1 #assigns nth component of nth basis vector to 1
 
     for k in 2:nmax+1
-        ypred= ylist[k-1] +s.*ytan
+        ypred= ylist[k-1] +s.*ytan #finds prediction for next ylist entry
 
         #Below finds solution yk
         fbound = y-> vcat(userf(y), (ytan'*(y-ypred)))   
@@ -26,7 +26,7 @@ function track_curve_new(userf,y0,ytan; h=1e-5,userdf=x->jacobian_new(userf,x;h=
         #Below finds new tangent
         A=vcat(userdf(ylist[k]),ytan')
         z=A\en1 
-        ytan=(z/norm(z,Inf))*(z'*ytan) #infinity norm used and new tangent found 
+        ytan=(z/norm(z,Inf))*(z'*ytan) #infinity norm used and new (normalised) tangent found 
     end
     return ylist, ytan #returns values along the curve for f and returns final tangent
 end
