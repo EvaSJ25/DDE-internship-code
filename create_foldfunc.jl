@@ -8,8 +8,7 @@ function create_foldfunc(f_DDE, f_tau,pars,x0,p0::Vector,par_indx::Vector,nd;m=1
     np=length(par_indx)
     uvec1=[x0 for _ in 1:nd+1]
     params=deepcopy(pars)
-    params[par_indx]=p0
-    #Id=Matrix{Float64}(I,n,n) #not needed as lambda is 0 for a fold 
+    params[par_indx]=p0 
 
     function df(s,x,p) #finds the partial derivative matrices
         params=deepcopy(pars)
@@ -23,18 +22,18 @@ function create_foldfunc(f_DDE, f_tau,pars,x0,p0::Vector,par_indx::Vector,nd;m=1
     eigvecs=stabfunc[3] #eigenvectors
 
     fold_indx=argmin(abs.(eigvals))#finds index of the eigenvalue that is closest to being purely 0
-    #lamini=real(eigvals[fold_indx]) #eigenvalue closest to being 0
-    evecs=eigvecs[:,fold_indx]
-    v0=evecs[1:n]
+    evecs=eigvecs[:,fold_indx] #eigenvectors of eigenvalue closest to 0
+    v0=evecs[1:n] #first eigenvector of eigenvalue closest to 0
 
+    #Seperates v0 into its real and imaginary parts
     vrini=real(v0)
     viini=-imag(v0)
+
+    #Below rescales vrini and viini so that their norm equals 1
     nv=norm(vcat(vrini,viini))
     vrini=vrini/nv
     viini=viini/nv
 
-    #y0=vcat(x0,vrini,viini,lamini,p0)
-    #@infiltrate
     y0=vcat(x0,vrini,viini,p0)
     function ffold(y)
         params=deepcopy(pars)
@@ -50,13 +49,12 @@ function create_foldfunc(f_DDE, f_tau,pars,x0,p0::Vector,par_indx::Vector,nd;m=1
 
         rf=f_DDE(uvec,params)
         A_mat=A[:,:,1] #starts with A_0
-        #Below creates the sum A_0 + A_1*exp(-lam*tau_1)+...+ A_nd*(-lam*tau_nd)
+        #Below creates the sum A_0 + A_1*exp(-λ*τ_1)+...+ A_nd*(-λ*τ_nd)=A_0 + A_1+..._A_nd (as λ=0)
         for j in 2:nd+1
             A_mat+=A[:,:,j]
         end
 
         J=-A_mat #characteristic (equation) matrix J=(Δ(λ)) for fold bifurcation (where λ=0)
-        #J=lam.*Id-A_mat
         rdf=J*v#charactersitic equation matrix times v (rdf=Δ(λ)*v) # v corresponds to v in system solution u(t)=ve^λt
         real_rdf=real(rdf)
         imag_rdf=imag(rdf)
