@@ -7,7 +7,7 @@ function j_eval(ti,te;diff=0)#j_eval(ti,te,n;diff=0)#, wj=[]) #(n) #n not needed
     ##ouput:
     #J=jacobian 
 
-    n=length(ti) #number (+1) of interpolation points/nodes
+    nint=length(ti) #number of interpolation points/nodes (n+1)???? e.g. nint=3 => (x_0,x_1,x_2) so n=2
     nnew=length(te)#number of points wanted to be evaluated
     lx=fill(NaN,nnew)#creates vector for l(x) values
 
@@ -16,11 +16,9 @@ function j_eval(ti,te;diff=0)#j_eval(ti,te,n;diff=0)#, wj=[]) #(n) #n not needed
         for t_i in ti
             lx[i]*=(te[i]-t_i)
             #@infiltrate
-            #lx[i]=(te[i]-ti[j])
-            #lx[i]+=()
-            #lx[i]=(te[i]-ti[j])   #l(x)=(x-x0)(x-x1)...(x-xn)
         end
     end 
+
     #Computing the weights w_j
     #do i need to find w_j or should i just use Chebyshev points of the second kind?
     #In the theory j runs from 0 to n for coding we'll run from 1 to n+1 (to not confuse indices)
@@ -38,16 +36,23 @@ function j_eval(ti,te;diff=0)#j_eval(ti,te,n;diff=0)#, wj=[]) #(n) #n not needed
     #end
 
     #To try and get a function working we'll take wj in form of Chebyshev points of the second kind:
-    wjvec=fill(NaN,n+1)
-    for j in 1:n+1
-        if j==1 || j==n+1
+    #wjvec=fill(NaN,n+1)
+    wjvec=fill(NaN,nint)
+    for j in 1:nint#j in 1:n+1
+        if j==1 || j==nint#n+1  #if j=0 or j=n (in source)
             wjvec[j]=(-1)^(j-1)*(1/2)
         else 
             wjvec[j]=(-1)^(j-1)*1
         end
     end
 
-    return lx
+    lvals=fill(NaN,nnew,nint) #the values of l_j(x^(i))
+    for i in 1:nnew
+        for j in 1:nint
+            lvals[i,j]=(lx[i]*wjvec[j])/(te[i]-ti[j])
+        end 
+    end 
 
-    #return wjvec 
+    return lx,wjvec,lvals
+    #return lvals
 end 
