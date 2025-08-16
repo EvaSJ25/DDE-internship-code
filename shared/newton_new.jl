@@ -1,5 +1,5 @@
 using LinearAlgebra
-function newton_new(f,x0; h=1e-5,df=x->jacobian_new(f,x;h=h),tol=1e-8,maxit=100)#maxit increased from 6 to 100
+function newton_new(f,x0; h=1e-5,df=x->jacobian_new(f,x;h=h),tol=1e-8,maxit=100)
     ##inputs:
     #f is the RHS of system 
     #x0 is starting guess for x
