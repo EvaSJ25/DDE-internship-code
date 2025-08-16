@@ -1,14 +1,14 @@
 function f_deriv(f,u,pars,nd;nx=[],np=[],v=[],h=1e-5,k=1e-5) #u many columns
     ##inputs:
     #f is the system (equations)
-    #u is the point jacobian being taken at
+    #u is the point the derivatives are being taken at
     #pars are the system parameters
     #nd is number of delays
     #nx is the state derivative you want (empty=no state derivative wanted)
-    #nx=1 is derivtive wrt to state at time t, nx=2 is derivative wrt to state at t-tau_1
+    #nx=1 is derivtive wrt to state at time t, nx=2 is derivative wrt to state at t-τ_1, etc.
     #np is whether you want parameter derivative (empty = no parameter derivative wanted)
-    #h is the small step for finite difference
-    #k is the small steps for paramater (used only is nx and np both non-empty)
+    #h is the small step for finite difference 
+    #k is the small steps for paramater (used only if nx and np both non-empty)
     
     ##outputs:
     #Matrix of partial derivatives (for chosen state and/or parameter derivative)

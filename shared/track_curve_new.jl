@@ -1,5 +1,20 @@
 using LinearAlgebra
 function track_curve_new(userf,y0,ytan; h=1e-5,userdf=x->jacobian_new(userf,x;h=h), nmax=100,stepsize=0.01,tol=1e-8,maxit=6)
+    ##inputs:
+    #userf is the function the user wishes to track (in a form such that it can be used in track curve - y0 is one dimension more than original x0 so the tangent can be used)
+    #y0 is the initial point - it contains x0 (initial states) and a starting point for the varying parameter
+    #ytan is the initial tangent
+    #h is the stepsize for use in jacobian_new
+    #tol is the tolerance used in newton_new
+    #maxit are the maximum number of iterations newton_new is allowed to do
+    #userdf is the jacobian_new function adapted for use in track_curve_new
+    #nmax is the number of points you want to track (tracking more points gives a more complete visual of the tracked function)
+    #stepsize is the stepsize added to the tangent (ytan) when predicting the new tracked point
+
+    ##outputs:
+    #ylist are all the points that have been tracked
+    #ytan is the final tangent
+    
     n=length(y0) 
     m=length(ytan)
     s=stepsize

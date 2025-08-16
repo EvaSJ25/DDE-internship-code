@@ -3,6 +3,9 @@ function newton_new(f,x0; h=1e-5,df=x->jacobian_new(f,x;h=h),tol=1e-8,maxit=100)
     ##inputs:
     #f is the RHS of system 
     #x0 is starting guess for x
+    #h is the stepsize needed for jacobian_new
+    #tol is the tolerance for which the two convergence conditions must be fulfilled
+    #maxit is the number of maximum iterations the function is allowed to do (if the function does not fulfil the tolerance conditions and exceeds maxit thenthe function did not converge succesfully onto a point x)
 
     ##outputs:
     #value of x that fulfils newton (if converged)

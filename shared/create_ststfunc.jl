@@ -2,10 +2,10 @@ using LinearAlgebra
 function create_ststfunc(f_DDE, u0, pars,nd; par_indx=[])#(f_DDE, f_tau,u0, pars,nd; par_indx=[]) #need to add delay equation later!!!
     #f_DDE is the RHS of the system
     #u0 is the initial guess (for the states x_i's)
-    #pars are parameters of the system (including the delays)
+    #pars are parameters of the system (including the delays), ensure that p0 initial guess of the (varying) parameter is in this vector
     #nd is the number of delays
     #par_indx is the index of the parameter the user wishes to vary (to use continuation over)
-    #Set par_indx=0 is you want to use the function output in Newton
+    #Leave par_indx empty to use the function output in Newton
     #p0 is the initial guess of the (varying) parameter; default is empty 
     
     n=length(u0) # number of states (x_i's)
