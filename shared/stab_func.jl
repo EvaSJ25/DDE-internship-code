@@ -1,4 +1,4 @@
-function stab_func(f_DDE,f_tau,x0::Vector,p0::Vector,pars,par_indx::Vector,nd;doprint=1,hopf=0,h=1e-6,m=100)#(f_DDE,f_tau,x0,p0,pars,par_indx,nd;doprint=1,hopf=0,h=1e-6,m=100)
+function stab_func(f_DDE,f_tau,x0::Vector,p0::Vector,pars,par_indx::Vector,nd;doprint=1,hopf=0,h=1e-6,m=100)
     ##inputs:
     #f_DDE is the DDE system
     #f_tau is the function for the delay
@@ -6,10 +6,11 @@ function stab_func(f_DDE,f_tau,x0::Vector,p0::Vector,pars,par_indx::Vector,nd;do
     #p0 is the (varied) parameter value at which this equilibrium point occurs at
     #pars= include constant tau value
     #m in the number of steps you want (to discretise over)
-    #pars_indx is the parameter that was varied to get xlist, plist (using track_curve function)
+    #pars_indx is the parameter that was varied when using track_curve function, to be given in vector form (even if only 1-dimensional)
     #nd is the number of delays
     #doprint=1 means that the eigvalues and the lowest eigenvector is given, doprint=0 doesn't return these
-    #hopf=1 outputs the estimated ω value if the user wants a hopf bifurcation. hopf=0 doesn't return ω value
+    #hopf=0 is the default and teh function doesn't return omega value or vrini or viini (see below)
+    #hopf!=0 outputs the estimated ω value if the user wants a hopf bifurcation.
 
     ##outputs:
     #stab=the stability of the equilibrium point given
