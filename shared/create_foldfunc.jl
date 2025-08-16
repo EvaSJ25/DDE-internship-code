@@ -1,8 +1,8 @@
 using LinearAlgebra
 function create_foldfunc(f_DDE, f_tau,pars,x0,p0::Vector,par_indx::Vector,nd;m=100)
     #find eigenvalue that is closest to being purely 0
-    include("stab_func.jl")
-    include("f_deriv.jl")
+    #include("stab_func.jl")
+    #include("f_deriv.jl")
 
     n=length(x0) #number of states of x:x_1,...,x_n
     np=length(par_indx)
