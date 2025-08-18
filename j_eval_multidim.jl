@@ -99,7 +99,7 @@ function j_eval_multidim(ti,te,fvec;diff=0)#(f,ti,te)#used for when x is multidi
             #pvals[k,i]=numer2/denom2
             #@infiltrate
         end 
-        pvals[k]
+        pvals[k] #p(x,y)
         numer2=0.0
         denom2=0.0
     end 
