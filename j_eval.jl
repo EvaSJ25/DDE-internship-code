@@ -50,15 +50,40 @@ function j_eval(ti,te;diff=0)#j_eval(ti,te,n;diff=0)#, wj=[]) #(n) #n not needed
                 #@infiltrate
             end 
             #lvals[i,j]=(lx[i]*wjvec[j])/(te[i]-ti[j])
-            @infiltrate
+            #@infiltrate
             lvals[i,j]=numer/denom
             numer=0.0
             denom=0.0
         end 
     end 
 
+    #D1ii=0.0
+    if diff==0
+        return lvals
+    elseif diff==1
+        D1matrix=fill(NaN,nint,nint)
+        for j in 1:nint
+            for i in 1:nint
+                if i!=j
+                    D1matrix[i,j]=(wjvec[j]/wjvec[i])/(ti[i]-ti[j])#is it ti or te?????
+                    @infiltrate
+                else 
+                    D1ii=0.0
+                    for k in 1:nint
+                        if k!=i
+                            D1ii+=(wjvec[i]/wjvec[k])/(ti[k]-ti[i])
+                            D1matrix[i,j]=-D1ii
+                            @infiltrate
+                        end
+                    end 
+                end 
+            end 
+        end 
+        return D1matrix
+    elseif diff==2
+    end 
     #return lx,wjvec,lvals
     #return lvals
     #return wjvec
-    return lvals
+    #return lvals
 end 
