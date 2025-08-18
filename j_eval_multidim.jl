@@ -1,4 +1,5 @@
 function j_eval_multidim(ti,te,fvec;diff=0)#(f,ti,te)#used for when x is multidimensional (used for an dimension of x??)
+    #doesn't work for 1D x yet (problem with fvec[i,j] in line 78ish - because j not existent for 1D x)
     #f is the (known) function - only useful if you know it
     #ti=the interpolation points/node
     #te=the points you want to evaluate at
@@ -24,14 +25,14 @@ function j_eval_multidim(ti,te,fvec;diff=0)#(f,ti,te)#used for when x is multidi
     lx=fill(NaN,nnew)#creates matrix for l(x) values
     tivals=[fill(NaN,nint) for _ in 1:ndim]
     tevals=[fill(NaN,nnew) for _ in 1:ndim]
-
+    #@infiltrate
     for k in 1:ndim
         tivals[k]=[u[k] for u in ti]#ti_k values #interpoltaion points t1 values for k=1, t2 values for k=2, etc.
         #@infiltrate
         tevals[k]=[u[k] for u in te]#kth row corresponds to.. (e.g for ndim=2 (x,y), k=1 corresponds to x, k=2 corresponds to y values)
     end 
 
-    @infiltrate
+    #@infiltrate
     #for i in 1:nnew
      #   lx[i]=1
       #  for t_i in ti
@@ -42,7 +43,7 @@ function j_eval_multidim(ti,te,fvec;diff=0)#(f,ti,te)#used for when x is multidi
 
     #Computing the weights w_j
     #In the theory j runs from 0 to n for coding we'll run from 1 to n+1 (for Julia indices)
-    wjvec=fill(NaN,nint,ndim) #matrix where the rows correspond to j and the columns to dimension of x (e.g. col 1 is x, col 2 is y)
+    wjvec=fill(NaN,nint,ndim) #matrix where the rows correspond to j and the columns to dimension of x (e.g. col 1 is x, col 2 is y) - i.e wjvec[1,1]=x_j^(x)
     #wjvec[1]=1 #w_0^(0)=1
     wjvec=fill(1.0,nint,ndim) #set all weights to begin at 1
     for i in 1:ndim
