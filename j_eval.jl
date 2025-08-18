@@ -3,13 +3,23 @@ function j_eval(ti,te;diff=0)#j_eval(ti,te,n;diff=0)#, wj=[]) #(n) #n not needed
     #ti=the interpolation points/node
     #te=the points you want to evaluate at
     #diff= what derivative you want (0=evaluation, 1= 1st derivative,2= 2nd derivative )
+    ##CURRENTLY FUNCTION ONLY WORKS FOR DIFF=0!!!!
 
     ##ouput:
-    #J=jacobian 
+    #lvals=  #J=jacobian
+    
+    
+    #for val in te if val in ti
+        #fx[]=fvec[]
+    #else 
+        #...
+    #end
+    #end 
 
     nint=length(ti) #number of interpolation points/nodes (n+1)???? e.g. nint=3 => (x_0,x_1,x_2) so n=2
     nnew=length(te)#number of points wanted to be evaluated
     lx=fill(NaN,nnew)#creates vector for l(x) values
+
 
     for i in 1:nnew
         lx[i]=1
@@ -46,6 +56,6 @@ function j_eval(ti,te;diff=0)#j_eval(ti,te,n;diff=0)#, wj=[]) #(n) #n not needed
     end 
 
     #return lx,wjvec,lvals
-    return lvals
-    #return wjvec
+    #return lvals
+    return wjvec
 end 
