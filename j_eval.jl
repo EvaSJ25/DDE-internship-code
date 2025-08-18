@@ -20,29 +20,22 @@ function j_eval(ti,te;diff=0)#j_eval(ti,te,n;diff=0)#, wj=[]) #(n) #n not needed
     end 
 
     #Computing the weights w_j
-    #do i need to find w_j or should i just use Chebyshev points of the second kind?
-    #In the theory j runs from 0 to n for coding we'll run from 1 to n+1 (to not confuse indices)
-    
+    #In the theory j runs from 0 to n for coding we'll run from 1 to n+1 (for Julia indices)
     wjvec=fill(NaN,nint)
     wjvec[1]=1 #w_0^(0)=1
     wjvec=fill(1.0,nint)
     for j in 2:nint #same as for j=1 to j=n in barycentric interpolation source
         for k in 1:j-1 #k in 0:j-1
-            #@infiltrate
-            #need to have old value
             wjvec[k]=(ti[k]-ti[j])*wjvec[k]
-            #@infiltrate
         end 
         for t in ti[1:j-1]
             wjvec[j]*=(ti[j]-t)
-            @infiltrate
         end 
     end 
-    #@infiltrate
+
     for j in 1:nint 
         wjvec[j]=1/wjvec[j]
     end 
-    @infiltrate
 
 
     lvals=fill(NaN,nnew,nint) #the values of l_j(x^(i))
@@ -53,6 +46,6 @@ function j_eval(ti,te;diff=0)#j_eval(ti,te,n;diff=0)#, wj=[]) #(n) #n not needed
     end 
 
     #return lx,wjvec,lvals
-    #return lvals
-    return wjvec
+    return lvals
+    #return wjvec
 end 
