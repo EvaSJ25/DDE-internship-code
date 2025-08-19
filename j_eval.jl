@@ -61,16 +61,16 @@ function j_eval(ti,te;diff=0)#j_eval(ti,te,n;diff=0)#, wj=[]) #(n) #n not needed
     if diff==0
         return lvals
     elseif diff==1
-        D1matrix=fill(0.0,nint,nint)
+        D1=fill(0.0,nint,nint)
         for i in 1:nint
             for j in 1:nint
                 if i!=j
-                    D1matrix[i,j]=(wjvec[j])/(wjvec[i]*(ti[i]-ti[j])) #is it ti or te?????
+                    D1[i,j]=(wjvec[j])/(wjvec[i]*(ti[i]-ti[j])) #is it ti or te?????
                 end 
             end
-            D1matrix[i,i]=-sum(D1matrix[i,:])
+            D1[i,i]=-sum(D1[i,:])
         end 
-        return D1matrix
+        return D1
     elseif diff==2
     end 
     #return lx,wjvec,lvals
