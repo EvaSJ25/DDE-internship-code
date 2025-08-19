@@ -17,8 +17,6 @@ function j_eval(ti,te;diff=0)#j_eval(ti,te,n;diff=0)#, wj=[]) #(n) #n not needed
     #elseif diff==2
     #end  
 
-
-    xvec4.+1e-10
     #intersect(ti,te)
 
     #Computing the weights w_j
@@ -77,6 +75,7 @@ function j_eval(ti,te;diff=0)#j_eval(ti,te,n;diff=0)#, wj=[]) #(n) #n not needed
             end
             D1[i,i]=-sum(D1[i,:])
         end 
+        #@infiltrate
         return D1
     elseif diff==2
         D2=fill(0.0,nint,nint)
