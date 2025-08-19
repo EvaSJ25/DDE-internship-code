@@ -17,6 +17,10 @@ function j_eval(ti,te;diff=0)#j_eval(ti,te,n;diff=0)#, wj=[]) #(n) #n not needed
     #elseif diff==2
     #end  
 
+
+    xvec4.+1e-10
+    #intersect(ti,te)
+
     #Computing the weights w_j
     #In the theory j runs from 0 to n for coding we'll run from 1 to n+1 (for Julia indices)
     wjvec=fill(NaN,nint)
@@ -31,10 +35,9 @@ function j_eval(ti,te;diff=0)#j_eval(ti,te,n;diff=0)#, wj=[]) #(n) #n not needed
         end 
     end 
 
-    for j in 1:nint 
-        wjvec[j]=1/wjvec[j]
+    for j in 1:nint
+        wjvec[j]=1/wjvec[j] 
     end 
-
 
     #l_j(x)=(wj/(x-x_j))/sum(wk/(x-x_k))
 
@@ -43,17 +46,21 @@ function j_eval(ti,te;diff=0)#j_eval(ti,te,n;diff=0)#, wj=[]) #(n) #n not needed
     lvals=fill(NaN,nnew,nint) #the values of l_j(x^(i))
     for i in 1:nnew
         for j in 1:nint
-            numer=wjvec[j]/(te[i]-ti[j])
-            #@infiltrate
-            for k in 1:nint
-                denom+=(wjvec[k]/(te[i]-ti[k]))
+            if te[i]==ti[j]
+                lvals[i,j]=1.0 # to avoid dividing by inf and (for xi=xj, then p(xi)=f(xj))
+            else
+                numer=wjvec[j]/(te[i]-ti[j])
                 #@infiltrate
-            end 
-            #lvals[i,j]=(lx[i]*wjvec[j])/(te[i]-ti[j])
-            #@infiltrate
-            lvals[i,j]=numer/denom
-            numer=0.0
-            denom=0.0
+                for k in 1:nint
+                    denom+=(wjvec[k]/(te[i]-ti[k]))
+                #@infiltrate
+                end 
+                #lvals[i,j]=(lx[i]*wjvec[j])/(te[i]-ti[j])
+                #@infiltrate
+                lvals[i,j]=numer/denom
+                numer=0.0
+                denom=0.0
+            end
         end 
     end 
 
