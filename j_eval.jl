@@ -65,13 +65,32 @@ function j_eval(ti,te;diff=0)#j_eval(ti,te,n;diff=0)#, wj=[]) #(n) #n not needed
         for i in 1:nint
             for j in 1:nint
                 if i!=j
-                    D1[i,j]=(wjvec[j])/(wjvec[i]*(ti[i]-ti[j])) #is it ti or te?????
+                    D1[i,j]=(wjvec[j])/(wjvec[i]*(ti[i]-ti[j])) 
                 end 
             end
             D1[i,i]=-sum(D1[i,:])
         end 
         return D1
     elseif diff==2
+        D2=fill(0.0,nint,nint)
+        mat1=fill(0.0,nint,nint)
+        for i in 1:nint
+            for k in 1:nint
+                if i!=k
+                    #@infiltrate
+                    mat1[i,k]=(wjvec[k])/(wjvec[i]*(ti[i]-ti[k]))
+                end 
+            end 
+            for j in 1:nint
+                if i!=j
+                    #@infiltrate
+                    D2[i,j]=-2*((wjvec[j])/(wjvec[i]*(ti[i]-ti[j])))*(sum(mat1[i,:])-1/(ti[i]-ti[j])) 
+                end 
+            end
+            D2[i,i]=-sum(D2[i,:])
+            #@infiltrate
+        end 
+        return D2
     end 
     #return lx,wjvec,lvals
     #return lvals
