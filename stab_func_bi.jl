@@ -1,3 +1,4 @@
+using LinearAlgebra
 function stab_func_bi(f_DDE, f_tau, pars, xe::Vector, nd, N; diff=1) #interval, N; diff=1)#(f_DDE, f_tau, pars, xe, nd, tj, ti,N; diff=1_) #tj are the interpolation point
     ##COULD ADD INTERVAL ARGUMENT BUT WANT TO ENSURE THEY DO IT OVER [-TAU_MAX , 0]
     #inputs:
@@ -50,6 +51,19 @@ function stab_func_bi(f_DDE, f_tau, pars, xe::Vector, nd, N; diff=1) #interval, 
     end 
     #return A,taumax
     #return mDmat
-    return stabmat
+    #return stabmat
+    sm_eigvals=eigvals(stabmat)
+    lambda_r_indx=findmax(real(sm_eigvals))[2] #finds index of rightmost eigenvalue
+    lambda_r=sm_eigvals[lambda_r_indx] #returns rightmost eigenvalue
+
+    stab=NaN
+
+    if (real(lambda_r)>0.0) #equilibrium is unstable if real part of rightmost eigenvalue greater than 0
+        stab=0
+    else 
+        stab=1 #equilibrium is stable if real part of rightmost eigenvalue less than 0
+    end
+
+    return stab, lambda_r
 
 end 
