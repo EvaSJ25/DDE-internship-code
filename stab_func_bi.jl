@@ -6,14 +6,30 @@ function stab_func_bi(f_DDE, f_tau, pars, xe::Vector, nd, N; diff=1) #interval, 
     #interval is the interval over which you want to find the interpolation points over (e.g. [-tau_max, 0]) #may not be needed if you can work it out in function
     #N is the number to create N+1 nodes for interpolation
 
-    ndim=length(xe)
+    m=length(xe)
+    Id=Matrix{Float64}(I,m,m)
     xevec=[xe for _ in 1:nd+1]
     tau=f_tau(xevec, pars)
     taumax=findmax(tau)[1] #returns highest delay
     ti=vcat(0, -tau) #values to evaluate at [0,-tau1,-tau2,...,-tau_nd]
+    nti=length(ti) #number of evaluation points
     #tj_int=[-taumax,0.0] #interval of tj values
 
     tj=reverse((-taumax/2)*(cos.(pi*(0:N)'/N)[:].+1)) #creates tj (interpoltaion) values in form of chebyshev points of 2nd kind over interval [-tau_max, 0]
+    ljvals=j_eval(tj, ti) #finds l_j(0), l_j(-tau1),...,l_j(-tau_nd) for j=1 to N+1 (or j=0 to N in literature)
+    D1=j_eval(tj,ti,diff=1) #finds first derivative matrix for interpolation points tj
+    #stabmat= fill(NaN, m*(N+1), m*(N+1))#creates blank matrix for the spectral differentiation matrix A_N
+    stabmat= fill(0.0, m*(N+1), m*(N+1))#creates blank matrix for the spectral differentiation matrix A_N
+
+    mDmat=fill(NaN, m*N, m*(N+1)) #creates blank matrix for finding d_ij for i=2,...,N+1, j=1,...,N+1 (bottom rows of stabmat)
+
+    for i in 2:N+1
+        for j in 1:N+1
+            mDmat[1+m*(i-2):m*(i-1),1+m*(j-1):m*j]=Id*D1[i,j]
+        end 
+    end 
+
+    stabmat[m+1:end,1:end]=mDmat #fills in d_ij values of A_N matrix (stability matrix)
 
     function df(i,x) #function finds the partial derivative matrices (Jacobians)
         params=deepcopy(pars)
@@ -21,13 +37,19 @@ function stab_func_bi(f_DDE, f_tau, pars, xe::Vector, nd, N; diff=1) #interval, 
         return J
     end
 
-    A=fill(NaN,ndim,ndim,nd+1) #creates array
+    A=fill(NaN,m,m,nd+1) #creates array
 
     for i in 1:nd+1
-        #@infiltrate
         A[:,:,i]=df(i,xe) #finds A_0, A_1,...,A_nd
     end 
     
-    return A,taumax
+    for j in 1:N+1
+        for k in 1:nti
+            stabmat[1:m,1+m*(j-1):m*j]+=A[:,:,k]*(ljvals[k,j]*Id)
+        end 
+    end 
+    #return A,taumax
+    #return mDmat
+    return stabmat
 
 end 
