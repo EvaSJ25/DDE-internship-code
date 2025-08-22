@@ -1,5 +1,5 @@
 using LinearAlgebra
-function create_foldfunc(f_DDE, f_tau,pars,x0,p0::Vector,par_indx::Vector,nd;m=100)
+function create_foldfunc(f_DDE, f_tau,pars,x0,p0::Vector,par_indx::Vector,nd;m=100,stabtype="matrix",N_num=0)
     #find eigenvalue that is closest to being purely 0
     #include("stab_func.jl")
     #include("f_deriv.jl")
@@ -17,10 +17,17 @@ function create_foldfunc(f_DDE, f_tau,pars,x0,p0::Vector,par_indx::Vector,nd;m=1
         return J
     end
 
-    stabfunc=stab_func_matrix(f_DDE, f_tau,x0,p0,params,par_indx,nd) #returns stability, eigenvalues and eigenvectors for point x0
-    eigvals=stabfunc[2] #eigenvalues 
-    eigvecs=stabfunc[3] #eigenvectors
-
+    if stabtype=="matrix"
+        stabfunc=stab_func_matrix(f_DDE, f_tau,x0,p0,params,par_indx,nd) #returns stability, eigenvalues and eigenvectors for point x0
+        eigvals=stabfunc[2] #eigenvalues 
+        eigvecs=stabfunc[3] #eigenvectors
+    elseif stabtype=="bi"
+        N=N_num
+        stabfunc=stab_func_bi(f_DDE,f_tau,params,x0,nd,N,fold=1) 
+        eigvals=stabfunc[2] #eigenvalues 
+        eigvecs=stabfunc[3]
+    else
+    end 
     fold_indx=argmin(abs.(eigvals))#finds index of the eigenvalue that is closest to being purely 0
     evecs=eigvecs[:,fold_indx] #eigenvectors of eigenvalue closest to 0
     v0=evecs[1:n] #first eigenvector of eigenvalue closest to 0
