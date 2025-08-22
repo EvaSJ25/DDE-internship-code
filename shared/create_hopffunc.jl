@@ -46,6 +46,8 @@ function create_hopffunc(f_DDE,f_tau, pars, x0,p0::Vector,par_indx::Vector,nd;m=
         vrini=sfunc[2] #real part of (first) eigenvector for eigenvalue closest to being purely imaginary
         viini=sfunc[3] #imaginary part of (first) eigenvector for eigenvalue closest to being purely imaginary
         omini=sfunc[4]
+    else
+        println("Please give the correct term for your stability finding method")
     end 
     y0=vcat(x0,vrini,viini,omini,p0) #combines initial guess of relevant Hopf information
 
