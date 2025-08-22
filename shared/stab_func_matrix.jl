@@ -1,4 +1,4 @@
-function stab_func(f_DDE,f_tau,x0::Vector,p0::Vector,pars,par_indx::Vector,nd;doprint=1,hopf=0,h=1e-6,m=100)
+function stab_func_matrix(f_DDE,f_tau,x0::Vector,p0::Vector,pars,par_indx::Vector,nd;doprint=1,hopf=0,h=1e-6,m=100)
     ##inputs:
     #f_DDE is the DDE system
     #f_tau is the function for the delay
