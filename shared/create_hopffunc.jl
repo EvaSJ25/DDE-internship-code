@@ -32,7 +32,7 @@ function create_hopffunc(f_DDE,f_tau, pars, x0,p0::Vector,par_indx::Vector,nd;m=
         return J
     end
 
-    sfunc=stab_func(f_DDE,f_tau,x0,p0,params,par_indx,nd,hopf=1) #want hopf!=0 here as we need the omega value
+    sfunc=stab_func_matrix(f_DDE,f_tau,x0,p0,params,par_indx,nd,hopf=1) #want hopf!=0 here as we need the omega value
     vrini=sfunc[2] #real part of (first) eigenvector for eigenvalue closest to being purely imaginary
     viini=sfunc[3] #imaginary part of (first) eigenvector for eigenvalue closest to being purely imaginary
     omini=sfunc[4] #initial ω guess (the eigenvalue closest to being purely imaginary)

@@ -17,7 +17,7 @@ function create_foldfunc(f_DDE, f_tau,pars,x0,p0::Vector,par_indx::Vector,nd;m=1
         return J
     end
 
-    stabfunc=stab_func(f_DDE, f_tau,x0,p0,params,par_indx,nd) #returns stability, eigenvalues and eigenvectors for point x0
+    stabfunc=stab_func_matrix(f_DDE, f_tau,x0,p0,params,par_indx,nd) #returns stability, eigenvalues and eigenvectors for point x0
     eigvals=stabfunc[2] #eigenvalues 
     eigvecs=stabfunc[3] #eigenvectors
 
