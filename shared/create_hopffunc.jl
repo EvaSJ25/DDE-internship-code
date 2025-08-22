@@ -1,5 +1,5 @@
 using LinearAlgebra #needed for I in identity matrix
-function create_hopffunc(f_DDE,f_tau, pars, x0,p0::Vector,par_indx::Vector,nd;m=100) 
+function create_hopffunc(f_DDE,f_tau, pars, x0,p0::Vector,par_indx::Vector,nd;m=100,stabtype="matrix",N_num=0) 
     ##inputs:
     #f_DDE is the system function(s)
     #f_tau is the delay equation/function
@@ -9,6 +9,8 @@ function create_hopffunc(f_DDE,f_tau, pars, x0,p0::Vector,par_indx::Vector,nd;m=
     #par_indx is the parameter(s) you're varying (again it should be given as a vector even if only of length 1)
     #nd is the number of delays
     #m is the number of discretised steps to be used stab_func
+    #stab_type indicates which stability finding method was used ("matrix" for large matrix method, "bi" for barycentric interpolation method)
+    #N_num= number of interpolation nodes if using "bi" stability finding method
     
     ##outputs:
     #y0 are the initial guesses of x, vr, vi, om, p
@@ -32,12 +34,19 @@ function create_hopffunc(f_DDE,f_tau, pars, x0,p0::Vector,par_indx::Vector,nd;m=
         return J
     end
 
-    sfunc=stab_func_matrix(f_DDE,f_tau,x0,p0,params,par_indx,nd,hopf=1) #want hopf!=0 here as we need the omega value
-    vrini=sfunc[2] #real part of (first) eigenvector for eigenvalue closest to being purely imaginary
-    viini=sfunc[3] #imaginary part of (first) eigenvector for eigenvalue closest to being purely imaginary
-    omini=sfunc[4] #initial ω guess (the eigenvalue closest to being purely imaginary)
-    
-
+    if stabtype=="matrix"
+        sfunc=stab_func_matrix(f_DDE,f_tau,x0,p0,params,par_indx,nd,hopf=1) #want hopf!=0 here as we need the omega value
+        vrini=sfunc[2] #real part of (first) eigenvector for eigenvalue closest to being purely imaginary
+        viini=sfunc[3] #imaginary part of (first) eigenvector for eigenvalue closest to being purely imaginary
+        omini=sfunc[4] #initial ω guess (the eigenvalue closest to being purely imaginary)
+    elseif stabtype=="bi"
+        N=N_num
+        sfunc=stab_func_bi(f_DDE,f_tau,params,x0,nd,N, hopf=1) #want hopf!=0 here as we need the omega value
+        #sfunc=stab_func_bi(f_DDE,f_tau,params,x0,nd,hopf=1,N_num=N) #want hopf!=0 here as we need the omega value
+        vrini=sfunc[2] #real part of (first) eigenvector for eigenvalue closest to being purely imaginary
+        viini=sfunc[3] #imaginary part of (first) eigenvector for eigenvalue closest to being purely imaginary
+        omini=sfunc[4]
+    end 
     y0=vcat(x0,vrini,viini,omini,p0) #combines initial guess of relevant Hopf information
 
     #Below defines the function for finding the Hopf (involving the characteristic equation, etc.)
