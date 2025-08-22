@@ -1,5 +1,5 @@
 using LinearAlgebra
-function stab_func_bi(f_DDE, f_tau, pars, xe::Vector, nd, N; diff=1, hopf=0) #interval, N; diff=1)#(f_DDE, f_tau, pars, xe, nd, tj, ti,N; diff=1_) #tj are the interpolation point
+function stab_func_bi(f_DDE, f_tau, pars, xe::Vector, nd, N; diff=1, hopf=0,fold=0) #interval, N; diff=1)#(f_DDE, f_tau, pars, xe, nd, tj, ti,N; diff=1_) #tj are the interpolation point
     ##COULD ADD INTERVAL ARGUMENT BUT WANT TO ENSURE THEY DO IT OVER [-TAU_MAX , 0]
     #inputs:
     #xe is the equilibrium point you want to find the stability of 
@@ -53,7 +53,8 @@ function stab_func_bi(f_DDE, f_tau, pars, xe::Vector, nd, N; diff=1, hopf=0) #in
     #return mDmat
     #return stabmat
     ev=eigen(stabmat)
-    sm_eigvals=ev.values
+    sm_eigvals=ev.values #stability matrix's eigenvalues
+    sm_eigvecs=ev.vectors #stability matrix's eigenvectors
     lambda_r_indx=findmax(real(sm_eigvals))[2] #finds index of rightmost eigenvalue
     lambda_r=sm_eigvals[lambda_r_indx] #returns rightmost eigenvalue
 
@@ -64,10 +65,10 @@ function stab_func_bi(f_DDE, f_tau, pars, xe::Vector, nd, N; diff=1, hopf=0) #in
     else 
         stab=1 #equilibrium is stable if real part of rightmost eigenvalue less than 0
     end
-
-    if hopf==0
+    
+    if hopf==0 && fold==0
         return stab, lambda_r
-    else
+    elseif hopf!=0 && fold==0
         imin=argmin(abs.(real.(sm_eigvals))) #finds index of eigenvalue that is closest to being purely imaginary
     
         evecs=ev.vectors[:,imin]
@@ -84,6 +85,8 @@ function stab_func_bi(f_DDE, f_tau, pars, xe::Vector, nd, N; diff=1, hopf=0) #in
 
         omini=abs(imag(sm_eigvals[imin]))
         return stab, vrini, viini, omini #, lambda_r
+    elseif fold!=0 && hopf==0
+        return stab, sm_eigvals, sm_eigvecs
     end
 
 end 
