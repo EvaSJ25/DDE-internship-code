@@ -1,5 +1,5 @@
 using LinearAlgebra
-function stab_func_bi(f_DDE, f_tau, pars, xe::Vector, nd, N; diff=1) #interval, N; diff=1)#(f_DDE, f_tau, pars, xe, nd, tj, ti,N; diff=1_) #tj are the interpolation point
+function stab_func_bi(f_DDE, f_tau, pars, xe::Vector, nd, N; diff=1, hopf=0) #interval, N; diff=1)#(f_DDE, f_tau, pars, xe, nd, tj, ti,N; diff=1_) #tj are the interpolation point
     ##COULD ADD INTERVAL ARGUMENT BUT WANT TO ENSURE THEY DO IT OVER [-TAU_MAX , 0]
     #inputs:
     #xe is the equilibrium point you want to find the stability of 
@@ -52,7 +52,8 @@ function stab_func_bi(f_DDE, f_tau, pars, xe::Vector, nd, N; diff=1) #interval, 
     #return A,taumax
     #return mDmat
     #return stabmat
-    sm_eigvals=eigvals(stabmat)
+    ev=eigen(stabmat)
+    sm_eigvals=ev.values
     lambda_r_indx=findmax(real(sm_eigvals))[2] #finds index of rightmost eigenvalue
     lambda_r=sm_eigvals[lambda_r_indx] #returns rightmost eigenvalue
 
@@ -64,6 +65,25 @@ function stab_func_bi(f_DDE, f_tau, pars, xe::Vector, nd, N; diff=1) #interval, 
         stab=1 #equilibrium is stable if real part of rightmost eigenvalue less than 0
     end
 
-    return stab, lambda_r
+    if hopf==0
+        return stab, lambda_r
+    else
+        imin=argmin(abs.(real.(sm_eigvals))) #finds index of eigenvalue that is closest to being purely imaginary
+    
+        evecs=ev.vectors[:,imin]
+        v0=evecs[1:m] #finds first eigenvector of eigenvalue closest to being purely imaginary
+
+        #Seperates v0 into its real and imaginary parts
+        vrini= real(v0) 
+        viini=-imag(v0)
+
+        #Below rescales vrini and viini so the norm is 1
+        nv=norm(vcat(vrini,viini))
+        vrini=vrini/nv
+        viini=viini/nv
+
+        omini=abs(imag(sm_eigvals[imin]))
+        return stab, vrini, viini, omini #, lambda_r
+    end
 
 end 
