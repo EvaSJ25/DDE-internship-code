@@ -65,15 +65,12 @@ function j_eval(ti,te;diff=0)#j_eval(ti,te,n;diff=0)#, wj=[]) #(n) #n not needed
     E=lvals
     D=j_diff(ti)
 
-    Dk=fill(NaN,nnew, nint)
+    Dk=fill(NaN,nnew, nint) #blank arry for matrix to multiply with fj vector to get derivatives of te for interpolated function
     d=diff
 
     for d=diff
         Dk=E*D^(d)
     end 
-
-
-
     return Dk
 
     #return lx,wjvec,lvals
