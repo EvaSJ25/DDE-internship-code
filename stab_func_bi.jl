@@ -18,7 +18,7 @@ function stab_func_bi(f_DDE, f_tau, pars, xe::Vector, nd, N; diff=1, hopf=0,fold
 
     tj=reverse((-taumax/2)*(cos.(pi*(0:N)'/N)[:].+1)) #creates tj (interpoltaion) values in form of chebyshev points of 2nd kind over interval [-tau_max, 0]
     ljvals=j_eval(tj, ti) #finds l_j(0), l_j(-tau1),...,l_j(-tau_nd) for j=1 to N+1 (or j=0 to N in literature)
-    D1=j_eval(tj,ti,diff=1) #finds first derivative matrix for interpolation points tj
+    D1=j_eval(tj,ti,diff=1) #finds first derivative matrix for interpolation points tj #tj rather than ti
     #stabmat= fill(NaN, m*(N+1), m*(N+1))#creates blank matrix for the spectral differentiation matrix A_N
     stabmat= fill(0.0, m*(N+1), m*(N+1))#creates blank matrix for the spectral differentiation matrix A_N
 
