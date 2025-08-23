@@ -18,6 +18,7 @@ function stab_func_DDE(A,taus, N; eigvecs=0)
     nti=length(ti) #number of evaluation points
 
 
+    #trial new laptop 
     tj=reverse((-taumax/2)*(cos.(pi*(0:N)'/N)[:].+1)) #creates tj (interpoltaion) values in form of chebyshev points of 2nd kind over interval [-tau_max, 0]
     ljvals=j_eval(tj, ti) #finds l_j(0), l_j(-tau1),...,l_j(-tau_nd) for j=1 to N+1 (or j=0 to N in literature)
     D1=j_diff(tj) #finds first derivative matrix for interpolation points tj #tj rathe rtha ti
