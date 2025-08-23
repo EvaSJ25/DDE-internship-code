@@ -1,5 +1,5 @@
 using LinearAlgebra
-function stab_func_DDE(A,τ, N; eigvecs=0)
+function stab_func_DDE(A,taus, N; eigvecs=0)
     ##inputs: 
     #A is a vector of matrices, where A_0,...,A_d are the partial derivative matrices or the matrices are the matrices in a linear system
     #τ are the delays (in vector form)
@@ -13,10 +13,10 @@ function stab_func_DDE(A,τ, N; eigvecs=0)
     m=map(size,A)[1][1] #finds the number of states in the system 
     nA=length(A) #number of matrices 
     Id=Matrix{Float64}(I,m,m)
-    taumax=findmax(τ)[1] #returns highest delay
-    ti=vcat(0, -τ) #values to evaluate at [0,-tau1,-tau2,...,-tau_nd]
+    taumax=findmax(taus)[1] #returns highest delay
+    ti=vcat(0, -taus) #values to evaluate at [0,-tau1,-tau2,...,-tau_nd]
     nti=length(ti) #number of evaluation points
-    
+
 
     tj=reverse((-taumax/2)*(cos.(pi*(0:N)'/N)[:].+1)) #creates tj (interpoltaion) values in form of chebyshev points of 2nd kind over interval [-tau_max, 0]
     ljvals=j_eval(tj, ti) #finds l_j(0), l_j(-tau1),...,l_j(-tau_nd) for j=1 to N+1 (or j=0 to N in literature)
