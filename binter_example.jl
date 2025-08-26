@@ -1,4 +1,4 @@
-function binter_example(x;diff=0)
+function binter_example(x;diff=0) #f(x)=|x|+0.5x-x^2
     if diff==0
         fun=abs.(x)+0.5*x -x.^2
         return fun
