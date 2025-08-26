@@ -69,31 +69,5 @@ function f_deriv(f,u,pars,nd;nx=[],np=[],v=[],h=1e-5,k=1e-5) #u many columns
             pars_neg[np]=deepcopy(pars[np])
         end
         return J
-    elseif length(nx)==2 #&& ~isempty(v)
-        J=fill(NaN,m,n)
-        A=fill(NaN,m,n)#df/dx_nx[1]
-        A1=fill(NaN,m,n)#df/dx_nx[2]        
-        for k in 1:n 
-            #for i in 1:2
-            #u_plus[nx[i]]=u_plus[nx[i]]+h*ej
-            #@infiltrate
-            u_plus[nx[1]]=u_plus[nx[1]]+h*ej
-            u_neg[nx[1]]=u_neg[nx[1]]-h*ej
-
-            A[:,k]=(1/2h)*(f(u_plus,pars) - f(u_neg,pars))
-            u_plus[nx[1]]=deepcopy(uvec[nx[1]]) #resets n_plus to what it was before (so it doesn't affect the next interation)
-            u_neg[nx[1]]=deepcopy(uvec[nx[1]])
-
-            #A[:,k]=(1/(h^2))*(f(u_plus,pars)-2*f(uvec,pars) + f(u_neg,pars))
-            u_plus[nx[2]]=u_plus[nx[2]]+h*ej
-            u_neg[nx[2]]=u_neg[nx[2]]-h*ej
-
-            A1[:,k]=(1/2h)*(f(u_plus,pars) - f(u_neg,pars))
-            u_plus[nx[2]]=deepcopy(uvec[nx[2]]) #resets n_plus to what it was before (so it doesn't affect the next interation)
-            u_neg[nx[2]]=deepcopy(uvec[nx[2]])
-
-            J=A1*(A*v)
-        end 
-        return J
     end
 end 
