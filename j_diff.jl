@@ -3,24 +3,25 @@ function j_diff(tbase)
     #tbase are the interpolation points/nodes
 
     #output:
-    # 1st-order differentiation matrix for the interpolation points
+    #D1 is the 1st-order differentiation matrix for the interpolation points (D_{ij}= l'j(t_i) for an interpolation point t_i
 
-    nint=length(tbase)
+    nint=length(tbase) #number of interpolation points
 
-    wjvec=fill(NaN,nint)
+    wjvec=fill(NaN,nint) #creates blank array for weights (wj)
     wjvec[1]=1 #w_0^(0)=1
     wjvec=fill(1.0,nint) #set all weights to 1 to start
-    for j in 2:nint #same as for j=1 to j=n in barycentric interpolation source
-        for k in 1:j-1 #k in 0:j-1
-            wjvec[k]=(tbase[k]-tbase[j])*wjvec[k]
+
+    for j in 2:nint 
+        for k in 1:j-1 
+            wjvec[k]=(tbase[k]-tbase[j])*wjvec[k] #updates weight with next interpolation point
         end 
         for t in tbase[1:j-1]
-            wjvec[j]*=(tbase[j]-t)
+            wjvec[j]*=(tbase[j]-t) #updates weight j 
         end 
     end 
 
     for j in 1:nint
-        wjvec[j]=1/wjvec[j] 
+        wjvec[j]=1/wjvec[j] #divides not to avoid extra unnecessary divisions (wj is 1/(product of t_i) for i≠j)
     end 
 
     D1=fill(0.0,nint,nint) #creates blank array for 1st-order differentiation matrix
@@ -30,8 +31,8 @@ function j_diff(tbase)
                 D1[i,j]=(wjvec[j])/(wjvec[i]*(tbase[i]-tbase[j])) 
             end 
         end
-        D1[i,i]=-sum(D1[i,:])
+        D1[i,i]=-sum(D1[i,:]) 
     end 
-
     return D1
+    #Note: Formula in above is taken from -> Barycentric Lagrange Interpolation, J-P. Berrut, L.N. Trefethen, SIAM Review, Vol 46, No.3 pp. 501-517, 2004 
 end 
