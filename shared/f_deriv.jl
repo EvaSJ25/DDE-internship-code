@@ -55,7 +55,7 @@ function f_deriv(f,u,pars,nd;nx=[],np=[],v=[],h=1e-5,k=1e-5) #u many columns
         for j in 1:n
             ej=fill(0.0,n)
             ej[j]=1
-            u_plus[nx]=u_plus[nx]+h*ej #slight change (by h) to state that derivative was asked for 
+            u_plus[nx]=u_plus[nx]+h*ej #slight change (by h) to state for derivative that was asked for 
             u_neg[nx]=u_neg[nx]-h*ej
 
             pars_plus[np]=pars_plus[np]+k #slight change (by k) to parameter indexed by np
