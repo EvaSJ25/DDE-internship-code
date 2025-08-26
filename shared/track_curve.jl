@@ -17,20 +17,20 @@ function track_curve(userf,y0,ytan; h=1e-5,userdf=x->jacobian(userf,x;h=h), nmax
     
     n=length(y0) 
     m=length(ytan)
-    s=stepsize
-    ylist= [fill(NaN,n) for _ in 1:nmax+1] #creates array 
+    s=stepsize #renames stepsize so it is easier to implement in the function
+    ylist= [fill(NaN,n) for _ in 1:nmax+1] #creates array for tracked points
     ytan=ytan 
-    ylist[1]=y0 #sets first component of ylist equal to inital guess
-    en1=fill(0.0,n) #n basis vector (all components 0 except nth component)
+    ylist[1]=y0 #sets first component of ylist (tracked points) equal to inital guess
+    en1=fill(0.0,n) #n-dim basis vector (all components 0 except nth component)
     en1[n]=1 #assigns nth component of nth basis vector to 1
 
     for k in 2:nmax+1
         ypred= ylist[k-1] +s.*ytan #finds prediction for next ylist entry
 
-        #Below finds solution yk
+        #Below finds solution y_k (corrected solution)
         fbound = y-> vcat(userf(y), (ytan'*(y-ypred)))   
         newt=newton(fbound,ypred) #newton outputs
-        ylist[k]=newt[1] #assigns solution yk to be equal to 1st output by newton
+        ylist[k]=newt[1] #assigns solution y_k to be equal to 1st output by newton
         converged=newt[2] #assigns converged to be second output of newton
         
         if converged==false #if newton hasn't converged it will break the loop
@@ -43,5 +43,5 @@ function track_curve(userf,y0,ytan; h=1e-5,userdf=x->jacobian(userf,x;h=h), nmax
         z=A\en1 
         ytan=(z/norm(z,Inf))*(z'*ytan) #infinity norm used and new (normalised) tangent found 
     end
-    return ylist, ytan #returns values along the curve for f and returns final tangent
+    return ylist, ytan #returns ylist (the values along the curve for f) and returns the final tangent
 end
