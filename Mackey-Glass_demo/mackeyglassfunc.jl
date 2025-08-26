@@ -3,7 +3,8 @@
 function mackeyglassfunc(u,pars)
     ##inputs:
     #u=[[x(t)],[x(t-tau)]] (components need to be in Vector{Float64} form)
-    #pars are the parameters = [beta,gamma,n] (e.g.=[1.0,1,2]) (pars components need to be in Float64 form)
+    #pars are the parameters = [beta,gamma,n] in Vector{Float64} form
+
     u1=convert(Float64,u[1][1]) 
     u2=convert(Float64,u[2][1])
     
