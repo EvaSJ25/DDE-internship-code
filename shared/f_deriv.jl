@@ -64,7 +64,7 @@ function f_deriv(f,u,pars,nd;nx=[],np=[],v=[],h=1e-5,k=1e-5) #u many columns
             J[:,j]=(1/(4*h*k))*(f(u_plus,pars_plus)-f(u_plus,pars_neg)-f(u_neg,pars_plus)+f(u_neg,pars_neg)) #finds finite difference with adjusted state and parameter values
             
             u_plus[nx]=deepcopy(uvec[nx]) #resets n_plus to what it was before (so it doesn't affect the next interation)
-            u_neg[nx]=deepcopy(uvec[nx])
+            u_neg[nx]=deepcopy(uvec[nx]) #resets n_neg to what it was before (so it doesn't affect the next interation)
             pars_plus[np]=deepcopy(pars[np])
             pars_neg[np]=deepcopy(pars[np])
         end
