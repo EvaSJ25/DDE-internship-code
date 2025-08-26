@@ -2,30 +2,21 @@ function j_eval(ti,te;diff=0)#j_eval(ti,te,n;diff=0)#, wj=[]) #(n) #n not needed
     ##inputs:
     #ti=the interpolation points/node
     #te=the points you want to evaluate at
-    #diff= what derivative you want (0=evaluation, 1= 1st derivative,2= 2nd derivative )
-    ##CURRENTLY FUNCTION ONLY WORKS FOR DIFF=0!!!!
+    #diff= what derivative you want to find points (te) at (0=evaluation, 1= 1st derivative,2= 2nd derivative )
 
     ##output:
-    #
+    #Dk is matrix such that when multiplied by fvec (the values of f(ti)), the user gets the values of f (when diff=0), f' (when diff=1), etc. at the desired points, te
 
-    nint=length(ti) #number of interpolation points/nodes (n+1)???? e.g. nint=3 => (x_0,x_1,x_2) so n=2
+    nint=length(ti) #number of interpolation points/nodes
     nnew=length(te)#number of points wanted to be evaluated
-    #lx=fill(NaN,nnew)#creates vector for l(x) values
-
-    #if diff==0
-    #elseif diff==1
-    #elseif diff==2
-    #end  
-
-    #intersect(ti,te)
 
     #Computing the weights w_j
-    #In the theory j runs from 0 to n for coding we'll run from 1 to n+1 (for Julia indices)
+    #In the theory (Berrut et al  2004), j runs from 0 to n for coding we'll run from 1 to n+1 (for Julia indices)
     wjvec=fill(NaN,nint)
     wjvec[1]=1 #w_0^(0)=1
-    wjvec=fill(1.0,nint)
-    for j in 2:nint #same as for j=1 to j=n in barycentric interpolation source
-        for k in 1:j-1 #k in 0:j-1
+    wjvec=fill(1.0,nint) #start all weights equal to 1
+    for j in 2:nint 
+        for k in 1:j-1 
             wjvec[k]=(ti[k]-ti[j])*wjvec[k]
         end 
         for t in ti[1:j-1]
@@ -37,44 +28,35 @@ function j_eval(ti,te;diff=0)#j_eval(ti,te,n;diff=0)#, wj=[]) #(n) #n not needed
         wjvec[j]=1/wjvec[j] 
     end 
 
-    #l_j(x)=(wj/(x-x_j))/sum(wk/(x-x_k))
-
     numer=0.0
     denom=0.0
-    lvals=fill(NaN,nnew,nint) #the values of l_j(x^(i))
+    lvals=fill(NaN,nnew,nint) #the values of l_j(t^(i))
     for i in 1:nnew
         for j in 1:nint
             if te[i]==ti[j]
-                lvals[i,j]=1.0 # to avoid dividing by inf and (for xi=xj, then p(xi)=f(xj))
+                lvals[i,j]=1.0 # to avoid dividing by Inf (for xi=xj, then p(xi)=f(xj))
             else
                 numer=wjvec[j]/(te[i]-ti[j])
-                #@infiltrate
                 for k in 1:nint
                     denom+=(wjvec[k]/(te[i]-ti[k]))
-                #@infiltrate
                 end 
-                #lvals[i,j]=(lx[i]*wjvec[j])/(te[i]-ti[j])
-                #@infiltrate
-                lvals[i,j]=numer/denom
-                numer=0.0
-                denom=0.0
+                lvals[i,j]=numer/denom #This formula is obtained from Equation (4.2) in (Berrut et al 2004)
+                numer=0.0 #resets numerator for next iteration
+                denom=0.0 #resets denominator for next iteration
             end
         end 
     end 
 
-    E=lvals
-    D=j_diff(ti)
+    E=lvals #matrix of l_j(t_i) values
+    D=j_diff(ti) #Finds 1st-order derivative for interpolation points (D defined as D1 in (Berrut et al 2004))
 
     Dk=fill(NaN,nnew, nint) #blank arry for matrix to multiply with fj vector to get derivatives of te for interpolated function
-    d=diff
+    d=diff #number of derivatives to be taken
 
     for d=diff
         Dk=E*D^(d)
     end 
     return Dk
 
-    #return lx,wjvec,lvals
-    #return lvals
-    #return wjvec
-    #return lvals
+    #Reference: Barycentric Lagrange Interpolation, J-P. Berrut, L.N. Trefethen, SIAM Review, Vol 46, No.3 pp. 501-517, 2004
 end 
