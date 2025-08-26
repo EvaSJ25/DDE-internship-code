@@ -1,6 +1,6 @@
 function jacobian(f,x; h=1e-5)
     ##inputs:
-    #f is the system 
+    #f is the RHS of the system 
     #x is the point you want to find the Jacobian at
     ##h is the stepsize for finite difference
 
@@ -9,7 +9,7 @@ function jacobian(f,x; h=1e-5)
     n=length(x) #length of vector x
     m=length(f(x)) #length of vector of outputs of f  e.g. if f is vector with 2 subfunctions, length of f =2
     J=fill(NaN,m,n) #array for Jacobian matrix, J is a matrix with m rows and n columns 
-    ej=fill(0.0,n) #defines ej vectors (basis vectors)
+    ej=fill(0.0,n) #defines ej vectors (basis vectors) 
     
     for j in 1:n
         ej=fill(0.0,n) #resets ej for each j iteration
