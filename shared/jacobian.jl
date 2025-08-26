@@ -1,4 +1,4 @@
-function jacobian_new(f,x; h=1e-5)
+function jacobian(f,x; h=1e-5)
     ##inputs:
     #f is the system 
     #x is the point you want to find the Jacobian at
