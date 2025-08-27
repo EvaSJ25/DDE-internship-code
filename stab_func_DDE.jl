@@ -62,6 +62,6 @@ function stab_func_DDE(A,taus, N; eigvecs=0)
     end
 
     #Reference:
-    #D. Breada, S. Maset, R. Vermiglio. *TACE-DDE: a Tool for Robust Analysis and Characteristic Equations for Delay Differential Equations*, volume 388, pages 145-155, 2009
+    #D. Breda, S. Maset, R. Vermiglio. *TACE-DDE: a Tool for Robust Analysis and Characteristic Equations for Delay Differential Equations*, volume 388, pages 145-155, 2009
     
 end 
