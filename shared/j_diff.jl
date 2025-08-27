@@ -1,11 +1,11 @@
-function j_diff(tbase)
+function j_diff(xbase)
     #input:
-    #tbase are the interpolation points/nodes
+    #xbase are the interpolation points/nodes
 
     #output:
     #D1 is the 1st-order differentiation matrix for the interpolation points (D_{ij}= l'j(t_i) for an interpolation point t_i
 
-    nint=length(tbase) #number of interpolation points
+    nint=length(xbase) #number of interpolation points
 
     wjvec=fill(NaN,nint) #creates blank array for weights (wj)
     wjvec[1]=1 #w_0^(0)=1
@@ -13,10 +13,10 @@ function j_diff(tbase)
 
     for j in 2:nint 
         for k in 1:j-1 
-            wjvec[k]=(tbase[k]-tbase[j])*wjvec[k] #updates weight with next interpolation point
+            wjvec[k]=(xbase[k]-xbase[j])*wjvec[k] #updates weight with next interpolation point
         end 
-        for t in tbase[1:j-1]
-            wjvec[j]*=(tbase[j]-t) #updates weight j 
+        for t in xbase[1:j-1]
+            wjvec[j]*=(xbase[j]-t) #updates weight j 
         end 
     end 
 
@@ -28,7 +28,7 @@ function j_diff(tbase)
     for i in 1:nint
         for j in 1:nint
             if i!=j
-                D1[i,j]=(wjvec[j])/(wjvec[i]*(tbase[i]-tbase[j])) #Equation (9.4) in (Berrut et al 2004)
+                D1[i,j]=(wjvec[j])/(wjvec[i]*(xbase[i]-xbase[j])) #Equation (9.4) in (Berrut et al 2004)
             end 
         end
         D1[i,i]=-sum(D1[i,:]) #Equation (9.5) in (Berrut et al 2004)
