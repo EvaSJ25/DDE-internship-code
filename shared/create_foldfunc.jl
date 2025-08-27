@@ -1,15 +1,28 @@
 using LinearAlgebra
-function create_foldfunc(f_DDE, f_tau,pars,x0,p0::Vector,par_indx::Vector,nd;m=100)
-    #find eigenvalue that is closest to being purely 0
-    #include("stab_func.jl")
-    #include("f_deriv.jl")
+function create_foldfunc(f_DDE, f_tau,pars,x0,p0::Vector,par_indx::Vector,nd;m=100) #helps to initialise guess and function to find eigenvalue that is closest to being purely 0
+    ##inputs:
+    #f_DDE is the system function(s)
+    #f_tau is the delay equation/function
+    #pars are the parameters values of the system
+    #x0 is the initial guess of the (equilibrium) state the Hopf bifurcation
+    #p0 is the initial parameter guess for the Hopf bifurcation (note this should always be given as a vector)
+    #par_indx is the parameter(s) you're varying (again it should be given as a vector even if only of length 1)
+    #nd is the number of delays
+    #m is the number of discretised steps to be used stab_func_matrix
+    
+    ##outputs:
+    #y0 are the initial guesses of x, vrini, viini, p
+    #Note:where x is are the states, vrini and viini are the real and imaginary parts of the (first) eigenvector for eigenvalue closest to being 0 and p is the initial guess of Hopf parameter p
+    #ffold is the function that finds the fold bifurcation
+
 
     n=length(x0) #number of states of x:x_1,...,x_n
-    np=length(par_indx)
+    #np=length(par_indx)#number of 
     uvec1=[x0 for _ in 1:nd+1]
     params=deepcopy(pars)
-    params[par_indx]=p0 
+    params[par_indx]=p0 #sets varied parameter to parameter guess p0
 
+    #The below function is for finding the partial derivative matrices (A_0,A_1,...,A_nd)
     function df(s,x,p) #finds the partial derivative matrices
         params=deepcopy(pars)
         params[par_indx]=p
@@ -34,7 +47,9 @@ function create_foldfunc(f_DDE, f_tau,pars,x0,p0::Vector,par_indx::Vector,nd;m=1
     vrini=vrini/nv
     viini=viini/nv
 
-    y0=vcat(x0,vrini,viini,p0)
+    y0=vcat(x0,vrini,viini,p0) #combines initial guess of relevant fold information
+
+    #Below defines the function for finding the fold (involving the characteristic equation, etc.)
     function ffold(y)
         params=deepcopy(pars)
         u,vr,vi,p=y[1:n], y[n+1:2*n], y[2*n+1:3*n],y[3*n+1:end] 
