@@ -8,7 +8,7 @@ function create_hopffunc(f_DDE,f_tau, pars, x0,p0::Vector,par_indx::Vector,nd;m=
     #p0 is the initial parameter guess for the Hopf bifurcation (note this should always be given as a vector (even if only varying one parameter))
     #par_indx is the parameter(s) you're varying (again it should be given as a vector even if only of length 1)
     #nd is the number of delays
-    #m is the number of discretised steps to be used stab_func
+    #m is the number of discretised steps to be used stab_func_matrix
     
     ##outputs:
     #y0 are the initial guesses of x, vr, vi, om, p
