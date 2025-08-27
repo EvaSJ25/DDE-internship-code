@@ -1,14 +1,14 @@
-function j_eval(tj,te;diff=0)
+function j_eval(xj,xe;diff=0)
     ##inputs:
-    #tj=the interpolation points/node
-    #te=the points you want to evaluate at
-    #diff= what derivative you want to find points (te) at (0=evaluation, 1= 1st derivative,2= 2nd derivative )
+    #xj=the interpolation points/node
+    #xe=the points you want to evaluate at
+    #diff= what derivative you want to find points (xe) at (0=evaluation, 1= 1st derivative,2= 2nd derivative )
 
     ##output:
-    #Dk is matrix such that when multiplied by fvec (the values of f(tj)), the user gets the values of f (when diff=0), f' (when diff=1), etc. at the desired points, te
+    #Dk is matrix such that when multiplied by fvec (the values of f(xj)), the user gets the values of f (when diff=0), f' (when diff=1), etc. at the desired points, xe
 
-    nint=length(tj) #number of interpolation points/nodes
-    nnew=length(te)#number of points wanted to be evaluated
+    nint=length(xj) #number of interpolation points/nodes
+    nnew=length(xe)#number of points wanted to be evaluated
 
     #Computing the weights w_j
     #In the theory (Berrut et al  2004), j runs from 0 to n for coding we'll run from 1 to n+1 (for Julia indices)
@@ -17,10 +17,10 @@ function j_eval(tj,te;diff=0)
     wjvec=fill(1.0,nint) #start all weights equal to 1
     for j in 2:nint 
         for k in 1:j-1 
-            wjvec[k]=(tj[k]-tj[j])*wjvec[k]
+            wjvec[k]=(xj[k]-xj[j])*wjvec[k]
         end 
-        for t in tj[1:j-1]
-            wjvec[j]*=(tj[j]-t)
+        for t in xj[1:j-1]
+            wjvec[j]*=(xj[j]-t)
         end 
     end 
 
@@ -33,12 +33,12 @@ function j_eval(tj,te;diff=0)
     lvals=fill(NaN,nnew,nint) #the values of l_j(t^(i))
     for i in 1:nnew
         for j in 1:nint
-            if te[i]==tj[j]
+            if xe[i]==xj[j]
                 lvals[i,j]=1.0 # to avoid dividing by Inf (for xi=xj, then p(xi)=f(xj))
             else
-                numer=wjvec[j]/(te[i]-tj[j])
+                numer=wjvec[j]/(xe[i]-xj[j])
                 for k in 1:nint
-                    denom+=(wjvec[k]/(te[i]-tj[k]))
+                    denom+=(wjvec[k]/(xe[i]-xj[k]))
                 end 
                 lvals[i,j]=numer/denom #This formula is obtained from Equation (4.2) in (Berrut et al 2004)
                 numer=0.0 #resets numerator for next iteration
@@ -48,9 +48,9 @@ function j_eval(tj,te;diff=0)
     end 
 
     E=lvals #matrix of l_j(t_i) values
-    D=j_diff(tj) #Finds 1st-order derivative for interpolation points (D defined as D1 in (Berrut et al 2004))
+    D=j_diff(xj) #Finds 1st-order derivative for interpolation points (D defined as D1 in (Berrut et al 2004))
 
-    Dk=fill(NaN,nnew, nint) #blank arry for matrix to multiply with fj vector to get derivatives of te for interpolated function
+    Dk=fill(NaN,nnew, nint) #blank arry for matrix to multiply with fj vector to get derivatives of xe for interpolated function
     d=diff #number of derivatives to be taken
 
     for d=diff
