@@ -3,7 +3,7 @@ function j_diff(xbase)
     #xbase are the interpolation points/nodes
 
     #output:
-    #D1 is the 1st-order differentiation matrix for the interpolation points (D_{ij}= l'j(t_i) for an interpolation point t_i
+    #D1 is the 1st-order differentiation matrix for the interpolation points (D_{ij}= l'j(x_i) for an interpolation point x_i
 
     nint=length(xbase) #number of interpolation points
 
