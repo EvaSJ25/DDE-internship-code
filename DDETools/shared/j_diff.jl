@@ -1,9 +1,9 @@
 function j_diff(xbase)
     #input:
-    #xbase are the interpolation points/nodes
+    #xbase are the interpolation points/nodes (x_j)
 
     #output:
-    #D1 is the 1st-order differentiation matrix for the interpolation points (D_{ij}= l'j(x_i) for an interpolation point x_i
+    #D1 is the 1st-order differentiation matrix for the interpolation points (D_{ij}= l'j(x_i) for an interpolation point x_i)
 
     nint=length(xbase) #number of interpolation points
 
@@ -21,7 +21,7 @@ function j_diff(xbase)
     end 
 
     for j in 1:nint
-        wjvec[j]=1/wjvec[j] #divides not to avoid extra unnecessary divisions (wj formula given in Equation (3.2) in (Berrut et al 2004))
+        wjvec[j]=1/wjvec[j] #divides now to avoid extra unnecessary divisions (wj formula given in Equation (3.2) in (Berrut et al 2004))
     end 
 
     D1=fill(0.0,nint,nint) #creates blank array for 1st-order differentiation matrix
@@ -34,5 +34,7 @@ function j_diff(xbase)
         D1[i,i]=-sum(D1[i,:]) #Equation (9.5) in (Berrut et al 2004)
     end 
     return D1
-    #Note: Formula in above is taken from -> Barycentric Lagrange Interpolation, J-P. Berrut, L.N. Trefethen, SIAM Review, Vol 46, No.3 pp. 501-517, 2004 
+
+    #Reference:
+    #Barycentric Lagrange Interpolation, J-P. Berrut, L.N. Trefethen, SIAM Review, Vol 46, No.3 pp. 501-517, 2004 
 end 
