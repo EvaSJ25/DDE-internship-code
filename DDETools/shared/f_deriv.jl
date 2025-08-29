@@ -10,7 +10,7 @@ function f_deriv(f,u,pars,nd;nx=[],np=[],v=[],h=1e-5,k=1e-5) #u many columns
     #k is the small steps for paramater (used only if nx and np both non-empty)
     
     ##outputs:
-    #J is the matrix of partial derivatives (for chosen state and/or parameter derivative)
+    #J is the matrix of partial derivatives (for chosen state and/or parameter derivative) 
 
     uvec=[u for _ in 1:nd+1] #creates a vector of vectors [x(t), x(t-τ_1),etc.]=[u,u,u,etc.]
     n=length(u) #length of vector x - the number of states (e.g. x1,x2,etc)
