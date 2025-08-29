@@ -16,7 +16,7 @@ function create_hopffunc(f_DDE,f_tau, pars, x0,p0::Vector,par_indx::Vector,nd;m=
     #fhopf is the function that finds the Hopf bifurcation and can be in a form that can be used in Newton (for finding exact parameter values) or track_curve (for continuation in a 2-parameter plane)
 
     n=length(x0) #number of states of x (i.e. x_1,...,x_n)
-    uvec1=[x0 for _ in 1:nd+1] #makes vector of vectors (repeats equilibrium for x(t)=x(t-τ1)=..=x(t-τnd)
+    uvec1=[x0 for _ in 1:nd+1] #makes vector of vectors (repeats equilibrium for x(t)=x(t-τ1)=..=x(t-τnd))
     params=deepcopy(pars)
     params[par_indx]=p0 #sets varied parameter(s) to parameter(s) guess p0
 
