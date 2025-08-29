@@ -2,10 +2,10 @@ function binter_example(x;diff=0) #f(x)=|x|+0.5x-x^2
     if diff==0
         fun=abs.(x)+0.5*x -x.^2
         return fun
-    elseif diff==1 
+    elseif diff==1 #first derivative
         fund1=x./abs.(x) -2*x .+ 0.5
         return fund1
-    elseif diff==2
+    elseif diff==2 #second derivative
         fund2=-2
         return fund2
     end 
