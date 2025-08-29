@@ -20,13 +20,13 @@ function newton(f,x0; h=1e-5,df=x->jacobian(f,x;h=h),tol=1e-8,maxit=100)
     converged=(norm(x-xold) < tol) && (norm(f(x))<tol) #conditions for convergence
     
     #While both the convergence conditions are not fulfilled and while the iteration number is below the maximum iteration number the cycle continues
-    #Note: once the maximum iteration is reached the final value of x found is returned
+    #Note: once the maximum iteration is reached the final value of x found is returned (even if the point has not converged)
     while (norm(x-xold) > tol || norm(f(xold))>tol) && (iter<maxit) 
         xold=x #reinitialises xold as the previously calculated x
         x=xold - (df(xold)\f(xold)) #finds new point x
         converged = (norm(x-xold) < tol) && (norm(f(x))<tol) #converged="true" if both conditions with the tolerance are met
         iter+=1 #index increased by 1 while the loop is still continued (the conditions are still being fulfilled, converged ="false")
     end
-    J=df(xold) #jacobian at previous x 
+    J=df(xold) #Jacobian at previous x 
     return x,converged, J
 end
