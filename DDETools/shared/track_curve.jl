@@ -20,7 +20,7 @@ function track_curve(userf,y0,ytan; h=1e-5,userdf=x->jacobian(userf,x;h=h), nmax
     s=stepsize #renames stepsize so it is easier to implement in the function
     ylist= [fill(NaN,n) for _ in 1:nmax+1] #creates array for tracked points
     ytan=ytan 
-    ylist[1]=y0 #sets first component of ylist (tracked points) equal to inital guess
+    ylist[1]=y0 #sets first component of ylist (tracked points) equal to initial guess
     en1=fill(0.0,n) #n-dim basis vector (all components 0 except nth component)
     en1[n]=1 #assigns nth component of nth basis vector to 1
 
