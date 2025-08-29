@@ -2,7 +2,7 @@ function jacobian(f,x; h=1e-5)
     ##inputs:
     #f is the RHS of the system 
     #x is the point you want to find the Jacobian at
-    ##h is the stepsize for finite difference
+    ##h is the stepsize for finite difference 
 
     ##outputs: The Jacobian (matrix) for the system f at the point x0
 
