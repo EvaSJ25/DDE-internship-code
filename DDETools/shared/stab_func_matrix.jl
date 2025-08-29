@@ -1,16 +1,16 @@
 function stab_func_matrix(f_DDE,f_tau,x0::Vector,p0::Vector,pars,par_indx::Vector,nd;doprint=1,hopf=0,h=1e-6,m=100) #stability function using large matrix approximation method
     ##inputs:
     #f_DDE is the DDE system
-    #f_tau is the function for the delay
+    #f_tau is the function for the delays
     #x0 is the equilibirium point you're finding the stability of
     #p0 is the (varied) parameter value at which this equilibrium point occurs at
     #pars are the system parameters and include the constant tau values
     #m in the number of steps you want to discretise over
-    #pars_indx is the parameter that was varied when using track_curve function, to be given in vector form (even if only 1-dimensional)
+    #pars_indx is the index of the parameter that was varied when using track_curve function, to be given in vector form (even if only 1-dimensional)
     #nd is the number of delays
     #doprint=1 means that the eigvalues and the lowest eigenvector is given, doprint=0 doesn't return these
     #hopf=0 is the default and the function doesn't return omega value or vrini or viini (see below)
-    #hopf!=0 outputs the estimated ω value if the user wants a hopf bifurcation.
+    #hopf!=0 outputs the estimated information for a Hopf bifurcation if the user asks
 
     ##outputs:
     #stab=the stability of the equilibrium point given
@@ -27,7 +27,7 @@ function stab_func_matrix(f_DDE,f_tau,x0::Vector,p0::Vector,pars,par_indx::Vecto
     params[par_indx]=p0 
     Id=Matrix{Float64}(I,n,n) #creates identity matrix (nxn dimensions)
 
-    l=n*(1+nd*m) #number of rows (=columns) of the large matrix
+    l=n*(1+nd*m) #number of rows (=columns) of the large stability matrix
     
     tau=f_tau(uvec1,params) #finds tau(s) of system (so they can be used in the large matrix calculation)
     stab_mat=fill(0.0,l,l) #creates blank array for large stability matrix
@@ -56,7 +56,7 @@ function stab_func_matrix(f_DDE,f_tau,x0::Vector,p0::Vector,pars,par_indx::Vecto
     function df(i,x,p) #function finds the partial derivative matrices (Jacobians)
         params=deepcopy(pars)
         params[par_indx]=p
-        J=f_deriv(f_DDE,x,params,nd,nx=i) #finds Jacobian for derivatives wrt x(t) for i=1, x(t-τ_1) for i=2, etc.
+        J=f_deriv(f_DDE,x,params,nd,nx=i) #finds Jacobian for derivatives wrt x(t) for i=1; wrt x(t-τ_1) for i=2, etc.
         return J
     end
     
@@ -66,7 +66,7 @@ function stab_func_matrix(f_DDE,f_tau,x0::Vector,p0::Vector,pars,par_indx::Vecto
         A[:,:,i]=df(i,x0,p0) #finds A_0, A_1,...,A_nd
     end 
     
-    #adds A_0,A_1,...,A_nd matrices to stability matrix
+    #adds A_0,A_1,...,A_nd matrices to the first n rows of the stability matrix 
     for j in 1:nd+1 #j in 1:nd-1
         stab_mat[1:n,(j-1)*m*n+1:n*((j-1)*m+1)]=A[:,:,j]
     end
