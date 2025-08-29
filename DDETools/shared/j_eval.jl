@@ -2,35 +2,35 @@ function j_eval(xj,xe;diff=0)
     ##inputs:
     #xj=the interpolation points/node
     #xe=the points you want to evaluate at
-    #diff= what derivative you want to find points (xe) at (0=evaluation, 1= 1st derivative,2= 2nd derivative )
+    #diff= what derivative you want to find points (xe) at (0=evaluation, 1= 1st derivative,2= 2nd derivative, etc.)
 
     ##output:
     #Dk is matrix such that when multiplied by fvec (the values of f(xj)), the user gets the values of f (when diff=0), f' (when diff=1), etc. at the desired points, xe
 
     nint=length(xj) #number of interpolation points/nodes
-    nnew=length(xe)#number of points wanted to be evaluated
+    nnew=length(xe) #number of points wanted to be evaluated
 
     #Computing the weights w_j
-    #In the theory (Berrut et al  2004), j runs from 0 to n for coding we'll run from 1 to n+1 (for Julia indices)
+    #In the theory (Berrut et al  2004), j runs from 0 to n for coding we'll run j from 1 to n+1 
     wjvec=fill(NaN,nint)
     wjvec[1]=1 #w_0^(0)=1
     wjvec=fill(1.0,nint) #start all weights equal to 1
     for j in 2:nint 
         for k in 1:j-1 
-            wjvec[k]=(xj[k]-xj[j])*wjvec[k]
+            wjvec[k]=(xj[k]-xj[j])*wjvec[k] #updates weight with next interpolation point
         end 
         for t in xj[1:j-1]
-            wjvec[j]*=(xj[j]-t)
+            wjvec[j]*=(xj[j]-t) #updates weight j
         end 
     end 
 
     for j in 1:nint
-        wjvec[j]=1/wjvec[j] 
+        wjvec[j]=1/wjvec[j] #divides now to avoid extra unnecessary divisions (wj formula given in Equation (3.2) in (Berrut et al 2004))
     end 
 
     numer=0.0
     denom=0.0
-    lvals=fill(NaN,nnew,nint) #the values of l_j(t^(i))
+    lvals=fill(NaN,nnew,nint) #the values of l_j(x_e))
     for i in 1:nnew
         for j in 1:nint
             if xe[i]==xj[j]
@@ -47,10 +47,10 @@ function j_eval(xj,xe;diff=0)
         end 
     end 
 
-    E=lvals #matrix of l_j(t_i) values
-    D=j_diff(xj) #Finds 1st-order derivative for interpolation points (D defined as D1 in (Berrut et al 2004))
+    E=lvals #matrix of l_j(x_e) values
+    D=j_diff(xj) #Finds 1st-order derivative for interpolation points (D defined as D^(1) in (Berrut et al 2004))
 
-    Dk=fill(NaN,nnew, nint) #blank arry for matrix to multiply with fj vector to get derivatives of xe for interpolated function
+    Dk=fill(NaN,nnew, nint) #blank array for matrix to multiply with fj vector to get derivatives of xe for interpolated function
     d=diff #number of derivatives to be taken
 
     for d=diff
