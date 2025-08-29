@@ -2,20 +2,20 @@ using LinearAlgebra #needed for I in identity matrix
 function create_hopffunc(f_DDE,f_tau, pars, x0,p0::Vector,par_indx::Vector,nd;m=100) 
     ##inputs:
     #f_DDE is the system function(s)
-    #f_tau is the delay equation/function
+    #f_tau is the delay equations/functions
     #pars are the parameters values of the system
     #x0 is the initial guess of the (equilibrium) state the Hopf bifurcation
     #p0 is the initial parameter guess for the Hopf bifurcation (note this should always be given as a vector (even if only varying one parameter))
-    #par_indx is the parameter(s) you're varying (again it should be given as a vector even if only of length 1)
+    #par_indx is the index of the parameter(s) you're varying (again it should be given as a vector even if only of length 1)
     #nd is the number of delays
-    #m is the number of discretised steps to be used stab_func_matrix
+    #m is the number of discretised steps to be used in stab_func_matrix
     
     ##outputs:
     #y0 are the initial guesses of x, vr, vi, om, p
     #Note:where x is are the states, vr and vi are the real and imaginary parts of the (first) eigenvector for eigenvalue om (ω) and p is the initial guess of Hopf parameter p
-    #fhopf is the function that finds the Hopf bifurcation and can be in a form that can be used in Newton (for finding exact parameter values) or Track curve (to continue to 2-parameter plane)
+    #fhopf is the function that finds the Hopf bifurcation and can be in a form that can be used in Newton (for finding exact parameter values) or track_curve (for continuation in a 2-parameter plane)
 
-    n=length(x0) #number of states of x:x_1,...,x_n
+    n=length(x0) #number of states of x (i.e. x_1,...,x_n)
     uvec1=[x0 for _ in 1:nd+1] #makes vector of vectors (repeats equilibrium for x(t)=x(t-τ1)=..=x(t-τnd)
     params=deepcopy(pars)
     params[par_indx]=p0 #sets varied parameter(s) to parameter(s) guess p0
@@ -30,7 +30,7 @@ function create_hopffunc(f_DDE,f_tau, pars, x0,p0::Vector,par_indx::Vector,nd;m=
         return J
     end
 
-    sfunc=stab_func_matrix(f_DDE,f_tau,x0,p0,params,par_indx,nd,hopf=1) #want hopf!=0 here as we need the omega value
+    sfunc=stab_func_matrix(f_DDE,f_tau,x0,p0,params,par_indx,nd,hopf=1) #want hopf!=0 here as we need the initial omega, vr and vi values
     vrini=sfunc[2] #real part of (first) eigenvector for eigenvalue closest to being purely imaginary
     viini=sfunc[3] #imaginary part of (first) eigenvector for eigenvalue closest to being purely imaginary
     omini=sfunc[4] #initial ω guess (the eigenvalue closest to being purely imaginary)
@@ -44,20 +44,20 @@ function create_hopffunc(f_DDE,f_tau, pars, x0,p0::Vector,par_indx::Vector,nd;m=
         u,vr,vi,om,p=y[1:n], y[n+1:2*n], y[2*n+1:3*n],y[3*n+1],y[3*n+2:end] 
         params[par_indx]=p
 
-        uvec=[u for _ in 1:nd+1]
-        v=vr+vi*im
+        uvec=[u for _ in 1:nd+1] #repeats equilibrium point for delayed states (in vector of vector form)
+        v=vr+vi*im #combines the real and imaginary parts of the eigenvector
         A=fill(NaN,n,n,nd+1)
 
         for i in 1:nd+1
-            A[:,:,i]=df(i,u,p)
+            A[:,:,i]=df(i,u,p) #Finds A_0,A_1,...,A_nd matrices
         end 
 
-        rf=f_DDE(uvec,params) # still need f(x*,...x*,params)=0
+        rf=f_DDE(uvec,params) # still need f(x*,...x*,params)=0 condition for a Hopf bifurcation
         A_mat=A[:,:,1] #starts with A_0
 
         tau=f_tau(uvec,params) #adds tau dependence to hopf function
         
-        #Below creates the sum A_0 + A_1*exp(-lam*tau_1)+...+ A_nd*(-lam*tau_nd)
+        #Below creates the sum A_0 + A_1*exp(-λ*τ_1)+...+ A_nd*(-λ*τ_nd)
         for j in 2:nd+1
             A_mat+=A[:,:,j]*exp(-(om*im)*tau[j-1])
         end
@@ -67,7 +67,7 @@ function create_hopffunc(f_DDE,f_tau, pars, x0,p0::Vector,par_indx::Vector,nd;m=
         real_rdf=real(rdf)
         imag_rdf=imag(rdf)
 
-        return vcat(rf,real_rdf,imag_rdf,vr'*vr+vi'*vi-1,viini'*vr-vrini'*vi)
+        return vcat(rf,real_rdf,imag_rdf,vr'*vr+vi'*vi-1,viini'*vr-vrini'*vi) #these conditions all need to equal 0 to find the true Hopf bifurcation
     end 
     return y0, fhopf
 end 
