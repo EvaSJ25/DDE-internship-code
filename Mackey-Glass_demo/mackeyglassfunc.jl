@@ -1,5 +1,5 @@
 #The Mackey-Glass equation:
-#xdot=β(x(t-τ)/(1+x(t-τ)^n))-γx(t)
+#xdot=β[x(t-τ)/(1+x(t-τ)^n)]-γx(t)
 function mackeyglassfunc(u,pars)
     ##inputs:
     #u=[[x(t)],[x(t-tau)]] (components need to be in Vector{Float64} form)
