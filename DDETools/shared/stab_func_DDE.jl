@@ -9,22 +9,22 @@ function stab_func_DDE(A,taus, N; eigvecs=0)
     ##outputs:
     #stab is the stability of the (equilibrium) point (already incorporated in the A matrices)
     #sm_eigvals are the eigenvalues of the point
-    #if asked: sm_eigvecs are the eigenvectors (in matrix form) of the point - ith column of matrix contain the eigenvectors of the ith eigenvalue
+    #if asked: sm_eigvecs are the eigenvectors (in matrix form) of the point - ith column of matrix contains the eigenvectors of the ith eigenvalue
 
     m=map(size,A)[1][1] #finds the number of states in the system 
     nA=length(A) #number of matrices 
     Id=Matrix{Float64}(I,m,m) #creates mxm identity matrix
     taumax=findmax(taus)[1] #returns highest delay
-    ti=vcat(0, -taus) #values to evaluate at [0,-tau1,-tau2,...,-tau_nd]
+    ti=vcat(0, -taus) #values to evaluate at are [0,-tau1,-tau2,...,-tau_nd]
     nti=length(ti) #number of evaluation points
 
 
     tj=reverse((-taumax/2)*(cos.(pi*(0:N)'/N)[:].+1)) #creates tj (interpoltaion) values in form of chebyshev points of 2nd kind over interval [-tau_max, 0]
-    ljvals=j_eval(tj, ti) #finds l_j(0), l_j(-tau1),...,l_j(-tau_nd) for j=1 to N+1 (or j=0 to N in literature)
+    ljvals=j_eval(tj, ti) #finds l_j(0), l_j(-tau1),...,l_j(-tau_nd) for j=1 to N+1
     D1=j_diff(tj) #finds first derivative matrix for interpolation points tj
     stabmat= fill(0.0, m*(N+1), m*(N+1))#creates blank matrix for the spectral differentiation matrix A_N
  
-    mDmat=fill(NaN, m*N, m*(N+1)) #creates blank matrix for finding d_ij for i=2,...,N+1, j=1,...,N+1 (bottom rows of stabmat) - adjusted layout from (Breda et al 2009)
+    mDmat=fill(NaN, m*N, m*(N+1)) #creates blank matrix for finding d_ij for i=2,...,N+1, j=1,...,N+1 - adjusted from layout in (Breda et al 2009)
 
     for i in 2:N+1
         for j in 1:N+1
@@ -36,12 +36,12 @@ function stab_func_DDE(A,taus, N; eigvecs=0)
 
     for j in 1:N+1
         for k in 1:nA
-            stabmat[1:m,1+m*(j-1):m*j]+=A[k]*(ljvals[k,j]*Id) #finds top row(s) of A_N - a_j for j=1,...,N+1 (adjusted from layout in (Breda et al 2009))
+            stabmat[1:m,1+m*(j-1):m*j]+=A[k]*(ljvals[k,j]*Id) #finds top m row(s) of A_N -> a_j for j=1,...,N+1 (adjusted from layout in (Breda et al 2009))
         end 
     end 
 
     ev=eigen(stabmat)
-    sm_eigvals=ev.values #stability matrix's eigenvalues
+    sm_eigvals=ev.values #stability matrix's (A_N) eigenvalues
  
     lambda_r_indx=findmax(real(sm_eigvals))[2] #finds index of rightmost eigenvalue
     lambda_r=sm_eigvals[lambda_r_indx] #returns rightmost eigenvalue
