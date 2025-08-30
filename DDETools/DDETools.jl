@@ -1,6 +1,6 @@
 module DDETools
 
-include("shared/jacobian.jl") #Jacobian function
+include("shared/jacobian.jl") #Jacobian function 
 include("shared/newton.jl") #Newton function
 include("shared/track_curve.jl") #Tracking curve function (used for continuation and for finding equilibria branches)
 include("shared/f_deriv.jl") #used to find state and/or parameter derivatives
