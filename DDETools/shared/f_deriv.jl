@@ -5,9 +5,9 @@ function f_deriv(f,u,pars,nd;nx=[],np=[],v=[],h=1e-5,k=1e-5) #u many columns
     #pars are the system parameters
     #nd is number of delays in the system
     #nx is the state derivative you want (empty=no state derivative wanted) -> nx=1 is derivtive wrt to state at time t, nx=2 is derivative wrt to state at t-τ_1, etc.
-    #np is whether you want a parameter derivative (empty = no parameter derivative wanted)
+    #np is the index of the parameter derivative user wants (empty = no parameter derivative wanted)
     #h is the small step for finite difference 
-    #k is the small steps for paramater (used only if nx and np both non-empty)
+    #k is the small steps for parameter (used only if nx and np both non-empty)
     
     ##outputs:
     #J is the matrix of partial derivatives (for chosen state and/or parameter derivative) 
