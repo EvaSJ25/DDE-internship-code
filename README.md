@@ -40,5 +40,5 @@ This folder contains the functions that define a simplified system for a single-
 
 ## References
 
-1. DDE-BIFTOOL demo 1 - Neuron* (12/2014). Available at https://ddebiftool.sourceforge.net/demos/neuron/html/demo1.html (Accessed: 29 August 2025)
+1. *DDE-BIFTOOL demo 1 - Neuron* (12/2014). Available at https://ddebiftool.sourceforge.net/demos/neuron/html/demo1.html (Accessed: 29 August 2025)
 2. Breda D., Maset S., Vermiglio R. (2009). 'TRACE-DDE: a Tool for Robust Analysis and Characteristic Equations for Delay Differential Equations', *Lecture Notes in Control And Information Sciences*, volume 388, pp 145-155. Available at: http://dx.doi.org/10.1007/978-3-642-02897-7_13
