@@ -24,7 +24,7 @@ This folder contains the file for the module DDETools - a module I created that 
 
 ## Stability using Breda et al. 2009 method
 
-This folder contains a Jupyter notebook that discusses the theory behind this method for finding DDE stability. It introduces and explains the functions I have created to implement this method before it walks through examples to aid user understanding.
+This folder contains a Jupyter notebook that discusses the theory behind the method put forward by Breda et al. for finding DDE stability in the paper (Breda et al. 2009). It introduces and explains the functions I have created to implement this method before it walks through examples to aid user understanding.
 
 ## Mackey-Glass equation demo
 
