@@ -16,7 +16,7 @@ This repository contains demos and code for some of the tools required for delay
 
 ## Barycentric interpolation
 
-One method of stability finding, the Breda et al method (Breda et al. 2009), is built on barycentric interpolation. The Jupyter notebook contained in this folder talks through the background information on barycentric interpolation before going through some examples on how some of the functions I have developed can be used for barycentric interpolation.
+One method of stability finding, the Breda et al method (Breda et al. 2009), is built on barycentric interpolation. The Jupyter notebook contained in this folder talks through the background information on barycentric interpolation before going through some examples on how some of the functions I have developed can be used.
 
 ## DDETools
 
