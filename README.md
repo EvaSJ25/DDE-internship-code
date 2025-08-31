@@ -12,19 +12,19 @@
 
 ## Introduction
 
-This repository contains demos and code for some of the tools required for delay differential equation (DDE) analysis. These functions include finding equilibria (or steady-states (stst)); finding stability (using two different methods); finding Hopf and fold bifurcations and also the continuation of these bifurcation over a 2-parameter space. To demonstrate how my code can be implemented I have included demos in Jupyter notebooks for three examples: Mackey-Glass equation, a single-delayed inverted pendulum problem and an example of modelling interaction between two neurons (the system of this is the same as the neuron example given for MATLAB's DDE-Biftool).
+This repository contains demos and code for some of the tools required for delay differential equation (DDE) analysis. These functions include finding equilibria (or steady-states); finding stability (using two different methods); finding Hopf and fold bifurcations and also the continuation of these bifurcations over a 2-parameter space. To demonstrate how my code can be implemented I have included demos in Jupyter notebooks for three examples: Mackey-Glass equation, a single-delayed inverted pendulum problem and an example of modelling interaction between two neurons (the system of this is the same as the neuron example given for MATLAB's DDE-Biftool).
 
 ## Barycentric interpolation
 
-One method of stability finding, the Breda et al method (Breda et al. 2009), is built on barycentric interpolation. The Jupyter notebook contained in this folder talks through the background information on barycentric interpolation before going through some examples of how to use the functions I created for use in barycentric interpolation.
+One method of stability finding, the Breda et al method (Breda et al. 2009), is built on barycentric interpolation. The Jupyter notebook contained in this folder talks through the background information on barycentric interpolation before going through some examples on how some of the functions I have developed can be used for barycentric interpolation.
 
 ## DDETools
 
-This folder contains the file for the module DDETools - a module I created that contains the functions I developed for DDE analysis in Julia. The 'shared' folder contains the developed functions
+This folder contains the file for the module DDETools - a module I created that contains the functions I developed for DDE analysis in Julia. The 'shared' folder contains the developed functions.
 
 ## Stability using Breda et al. 2009 method
 
-This folder contains a Jupyter notebook that discusses the theory behind the method put forward by Breda et al. for finding DDE stability in the paper (Breda et al. 2009). It introduces and explains the functions I have created to implement this method before it walks through examples to aid user understanding.
+This folder contains a Jupyter notebook that discusses the theory behind the method put forward by Breda et al. for finding DDE stability (Breda et al. 2009). It introduces and explains the functions I have created to implement this method before it walks through examples to aid user understanding of how to use these functions.
 
 ## Mackey-Glass equation demo
 
@@ -36,7 +36,7 @@ This folder contains the functions that define a system to model the reaction be
 
 ## Single-delayed inverted pendulum demo
 
-This folder contains the functions that define a simplified system for a single-delayed inverted pendulum problem (and its delays). The folder also contains a Jupyter notebook that introduces the reader to the neuron DDE system and then shows how the developed functions in DDETools can be used to analyse this DDE system.
+This folder contains the functions that define a simplified system for a single-delayed inverted pendulum problem (and its delays). The folder also contains a Jupyter notebook that introduces the reader to this DDE system and then shows how the developed functions in DDETools can be used to analyse this DDE system.
 
 ## References
 
